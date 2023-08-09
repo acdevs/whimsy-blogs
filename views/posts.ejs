@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+<body>
+
+    <%- include('./partials/nav.ejs') %>
+
+    <div class="posts content">
+        <h2><%= blog.title %></h2>
+        <p class="snippet quote"><%= blog.snippet %></p>
+        <p class="body"><%- blog.body %></p>
+        <button class="delete-btn" data-doc="<%= blog._id %>"><i class="fa-solid fa-eraser"></i></button>
+    </div>
+
+    <div class="popup-delete">
+        <div>
+          <p>Are you sure you want to erase this blog?</p>
+          <div class="delete-btns">
+            <button class="delete-yes">Erase</button>
+            <button class="delete-no">Cancel</button>
+          </div>
+        </div>
+    </div>
+
+    <%- include('./partials/foot.ejs') %>
+
+    <script>
+
+      const deleteBtn = document.querySelector('.delete-btn');
+      const deleteYes = document.querySelector('.delete-yes');
+      const deleteNo = document.querySelector('.delete-no');
+      const popup = document.querySelector('.popup-delete');
+      const body = document.body;
+
+      deleteBtn.addEventListener('click', (e) => {
+        popup.classList.add('popup-delete-open');
+        body.classList.add('body-popup-open');
+      });
+
+      deleteNo.addEventListener('click', (e) => {
+        popup.classList.remove('popup-delete-open');
+        body.classList.remove('body-popup-open');
+      });
+
+      deleteYes.addEventListener('click', (e) => {
+        const endpoint = `/blogs/${deleteBtn.dataset.doc}`;
+  
+        fetch(endpoint, {
+          method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => window.location.href = data.redirect)
+        .catch(err => console.log(err));
+      });
+      
+    </script>
+</body>
+</html>
