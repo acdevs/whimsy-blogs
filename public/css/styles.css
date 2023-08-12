@@ -1,0 +1,397 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&family=Cormorant+Garamond&family=DM+Serif+Display&family=Cormorant:wght@300;500&display=swap');
+
+:root{
+    --heading: 'DM Serif Display', serif;
+    --body:'Cormorant Garamond', serif;
+    --black: #1c1c1c;
+    --gray: #7E7E7E;
+    --gray-light: #E4E4E4;
+    --font-size-base: 1rem;
+    --font-size-md: clamp(1.25rem, 0.61vw + 1.1rem, 1.58rem);
+    --font-size-lg: clamp(1.56rem, 1vw + 1.31rem, 2.11rem);
+    --font-size-xl: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
+}
+body::-webkit-scrollbar{
+    width: 0;
+}
+body{
+    margin: 0;
+    padding: 0;
+    font-family: var(--body);
+    font-size: 1.2rem;
+    background-image: url(../res/background-illustration.jpg);
+    background-size: 40%;
+    background-repeat: no-repeat;
+    background-position: top -40% right 0;
+    background-attachment: fixed;
+}
+h1, h2, h3, a, p{
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+a{
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+}
+a:hover{
+    text-decoration: underline;
+}
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 2rem;
+    background-color: #f5f5f5;
+    margin-bottom: 5rem;
+}
+.site-title > h1{
+    font-size: 3rem;
+    font-family: var(--heading);
+}
+.site-title > p{
+    font-size: 1.2rem;
+    font-family: var(--body);
+}
+.site-links > a{
+    margin-left: 2rem;
+}
+.site-title a:hover{
+    text-decoration: none;
+}
+.site-links > .signin-btn,
+.site-links > .profile-btn{
+    padding: 0.75rem 1rem;
+    border: 1px solid #000;
+    text-decoration: none;
+}
+.site-links > a.signin-btn:hover,
+.site-links > .profile-btn:hover{
+    background-color: #000;
+    color: #f5f5f5;
+}
+.profile-btn i{
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+}
+.profile-options{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 200px;
+    background-color: #f5f5f5;
+    border: 1px solid #000;
+    display: none;
+}
+
+footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem 2rem;
+    background-color: transparent;
+    margin-top: 5rem;
+    font-size: 0.9rem;
+}
+footer i{
+    font-size: 1rem;
+    color: #000;
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    line-height: 40px !important;
+    text-align: center;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+}footer i:hover{
+    color: #fff;
+    background-color: #000;
+}
+h2{
+    margin-bottom: 40px;
+    font-family: var(--heading);
+    font-size: 2.5rem;
+}
+h3{
+    font-family: var(--heading);
+    text-transform: capitalize;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+.content{
+    position: relative;
+    margin: 2rem 5rem;
+    max-width: 700px;
+}
+.blog{
+    position: relative;
+    margin-bottom: 20px;
+    padding: 1.2rem 2rem;
+    background-color: #f5f5f5;
+    border-left: 6px solid #000;
+}
+.blog h3{
+    font-size: 1.75rem;
+}
+.blog .author{
+    font-style: oblique;
+}
+.posts .author{
+    font-style: oblique;
+    color: #000;
+    margin: 2rem 0;
+}
+.timestamp{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 1.2rem 2rem;
+    font-size: 1rem;
+}
+.content p {
+    line-height: 1.6;
+}
+.content .snippet{
+    margin-bottom: 2rem;
+}
+.quote {
+    font-style: italic;
+    color: #888;
+}
+p.body::first-letter{
+    line-height: 0.9;
+    font-size: 3rem;
+    font-family: var(--heading);
+    vertical-align: text-bottom; 
+    margin-right: 4px;
+}
+button{
+    box-sizing: border-box !important;
+    cursor: pointer;
+    border: 0;
+    outline: none !important;
+}
+.tool-btns{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -100px;
+}
+.tool-btns button{
+    font-size: 1rem;
+    color: #a4a4a4;
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+}
+.tool-btns button:hover{
+    color: #f5f5f5;
+    background-color: #000;
+}
+.tool-btns .like-btn{
+    position: relative;
+}
+.tool-btns .like-btn::after{
+    content: attr(data-likes);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 40px;
+    text-align: center;
+    margin-left: -2rem;
+}
+.delete-btn{
+    margin-top: 0.5rem;
+}
+.popup-delete{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 100;
+}
+.popup-delete > div{
+    background-color: #f5f5f5;
+    padding: 20px;
+    width: 250px;
+}
+.popup-delete > div > p{
+    margin-bottom: 2rem;
+}
+.popup-delete .delete-btns{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.popup-delete .delete-btns button{
+    font-family: var(--body);
+    font-size: 1rem;
+    text-align: center;
+    width: 115px;
+    height: 50px;
+    line-height: 50px;
+    cursor: pointer;
+}
+.popup-delete .delete-no{
+    background-color: #000;
+    color: #f5f5f5;
+}
+.popup-delete .delete-yes{
+    background-color: transparent;
+    color: #000;
+    border: 1px solid #000;
+}
+.popup-delete-open{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup-delete-open > div{
+    display: block;
+    animation: popup 0.25s ease-in-out forwards;
+}
+@keyframes popup{
+    0%{
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    60%{
+        transform: scale(1.05);
+    }
+    100%{
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.body-popup-open{
+    overflow: hidden;
+}
+.create-blog form, .edit-blog form{
+    max-width: 700px;
+    margin: 0 auto;
+}
+.create-blog input,
+.create-blog textarea,
+.edit-blog input,
+.edit-blog textarea,
+.form-elements input{
+    box-sizing: border-box;
+    outline: none;
+    font-family: var(--body);
+    display: block;
+    width: calc(100%);
+    margin: 10px 0;
+    padding: 1rem 1.5rem;
+    border: 0;
+    background-color: #f5f5f5;
+}
+.create-blog input:hover,
+.create-blog textarea:hover,
+.create-blog input:focus,
+.create-blog textarea:focus,
+.edit-blog input:hover,
+.edit-blog textarea:hover,
+.edit-blog input:focus,
+.edit-blog textarea:focus{
+    border-left: 6px solid #000;
+}
+input#title::placeholder{
+    color: #8e8e8e;
+}
+.create-blog input#title, .edit-blog input#title{
+    font-family: var(--heading);
+    font-size: 2rem;
+}
+.create-blog input#snippet, .edit-blog input#snippet{
+    font-style: italic;
+    font-size: 1.2rem;
+}
+.create-blog #body, .edit-blog #body{
+    font-size: 1.2rem;
+}
+.create-blog label, .edit-blog label{
+    font-family: var(--heading);
+    display: block;
+    margin-top: 24px;
+}
+.create-blog textarea, .edit-blog textarea{
+    height: 250px;
+}
+.create-blog button, 
+.edit-blog button, 
+.signin button{
+    font-family: var(--body);
+    font-size: 1rem;
+    margin-top: 20px;
+    background: #000;
+    color: white;
+    padding: 1rem 2rem;
+    border: 0;
+    cursor: pointer;
+}
+.create-blog button:disabled, 
+.edit-blog button:disabled, 
+.signin button:disabled{
+    background-color: #8e8e8e;
+    cursor: not-allowed;
+}
+.form{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+.form > div{
+    height: 450px;
+}
+.form-elements{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(60% - 10px);
+}
+.form-elements > div{
+    width: 100%;
+    padding: 0 4rem 0 2rem;
+}
+.form-elements label{
+    font-size: 1.2rem;
+    margin-left: -0.5rem;
+}
+.form-elements input{
+    font-size: 1.34rem;
+    margin-top: 8px;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+}
+.form-elements input:hover, .form-elements input:focus{
+    border-left: 4px solid #000;
+}
+.form-illus{
+    width: calc(40% - 10px);
+    background-image: url(../res/portal.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+
+textarea::-webkit-scrollbar{
+    width: 2px;
+}
+textarea::-webkit-scrollbar-track{
+    background-color: transparent;
+}
+textarea::-webkit-scrollbar-thumb{
+    background-color: #000;
+}

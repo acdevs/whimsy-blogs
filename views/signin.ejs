@@ -1,0 +1,37 @@
+<%- include('./partials/header.ejs') %>
+
+<div class="signin content">
+    <form action="/blogs/author" method="POST">
+        <h2>Enter the Portal</h2>
+        <div class="form">
+            <div class="form-illus"></div>
+            <div class="form-elements">
+                <div>
+                <label for="alias">Your magical alias?</label>
+                <input type="text" id="alias" name="alias" autofocus>
+                <label for="email">Whisper your enchanted email.</label>
+                <input type="email" id="email" name="email">
+                <label for="password">Guard with a secret passphrase!</label>
+                <input type="password" id="password" name="password">
+                <button type="submit" disabled>Enter</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    const form = document.querySelector('form');
+    const alias = document.querySelector('#alias');
+    const email = document.querySelector('#email');
+    const password = document.querySelector('#password');
+    const button = document.querySelector('button[type="submit"]');
+
+    alias.addEventListener('input', () => {
+        alias.value ? alias.value = alias.value.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()) : "";
+    });
+
+    form.addEventListener('input', () => {
+        alias.value && email.value && password.value ? button.disabled = false : button.disabled = true;
+    });
+</script>

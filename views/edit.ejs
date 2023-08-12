@@ -1,0 +1,16 @@
+<%- include('./partials/header.ejs') %>
+
+<div class="edit-blog content">
+    <form action="/blogs/edit" method="POST">
+        <h2>Edit Blog</h2>
+        <label for="title">Blog title</label>
+        <input type="text" id="title" name="title" value="<%= blog.title %>">
+        <label for="snippet">Blog snippet</label>
+        <input type="text" id="snippet" name="snippet" value="<%= blog.snippet %>">
+        <label for="body">Blog body</label>
+        <textarea id="body"><%= blog.body.replace(/<br>/g, '\n') %></textarea>
+        <input type="hidden" id="processedBody" name="body">
+        <input type="hidden" id="id" name="_id" value="<%= blog._id %>">
+        <button type="submit" disabled>Save</button>
+    </form>
+</div>

@@ -1,27 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<%- include('./partials/head.ejs') %>
-<body>
+<%- include('./partials/header.ejs') %>
 
-    <%- include('./partials/nav.ejs') %>
+<div class="blogs content">
+    <h2>Latest Blogs</h2>
 
-    <div class="blogs content">
-        <h2>All my blogs</h2>
-
-        <% blogs && blogs.map((blog) => {
-            %>
-            <div class="blog">
-                <h3><%= blog.title %></h3>
-                <p class="snippet"><%= blog.snippet %></p>
-                <a href="/blogs/<%= blog._id %>">Read more...</a>
-            </div>
-            <%
-        })%>
-        <% if (blogs.length === 0) { %>
-            <p>No blogs to read yet. 😢</p>
-        <% } %>
-    </div>
-
-    <%- include('./partials/foot.ejs') %>
-</body>
-</html>
+    <% blogs && blogs.map((blog) => {
+        %>
+        <div class="blog">
+            <p class="author">_emoji_ author_name</p>
+            <h3><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h3>
+            <p class="snippet"><%= blog.snippet %></p>
+            <p class="timestamp">
+                <% if(new Date(blog.createdAt) < new Date(blog.updatedAt)){ %>
+                    (edited)
+                <% } %>
+                <%= blog.timestamp %>
+            </p>
+        </div>
+        <%
+    })%>
+    <% if (blogs.length === 0) { %>
+        <p>No blogs to read yet. 😢</p>
+    <% } %>
+</div>

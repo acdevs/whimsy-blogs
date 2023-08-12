@@ -3,6 +3,7 @@ const express = require("express")
 const morgan = require("morgan")
 const mongoose = require("mongoose")
 const blogRoutes = require("./routes/blogRoutes")
+const expressLayouts = require("express-ejs-layouts")
 
 const app = express()
 
@@ -32,7 +33,9 @@ app.use(morgan("dev"))
 app.use(express.static("public"))
 app.use(express.urlencoded({ extended: true })) // parse url-encoded data
 
-/* register view engine */
+/* templating / view engine */
+app.use(expressLayouts)
+app.set('layout', 'layouts/main')
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 

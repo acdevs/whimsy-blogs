@@ -1,33 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<%- include('./partials/head.ejs') %>
-<body>
-    
-    <%- include('./partials/nav.ejs') %>
-    
-    <div class="create-blog content">
-        <form action="/blogs" method="POST">
-            <h2>Write a New Blog</h2>
-            <label for="title">Blog title:</label>
-            <input type="text" id="title" name="title" placeholder="Blog title">
-            <label for="snippet">Blog snippet:</label>
-            <input type="text" id="snippet" name="snippet" placeholder="Blog snippet">
-            <label for="body">Blog body:</label>
-            <textarea id="body" placeholder="Blog body"></textarea>
-            <input type="hidden" id="processedBody" name="body">
-            <button>Submit</button>
-        </form>
-    </div>
+<%- include('./partials/header.ejs') %>
 
-    <%- include('./partials/foot.ejs') %>
-
-    <script>
-        const form = document.querySelector('form'); 
-        form.addEventListener('submit', () => {
-            const body = document.querySelector('#processedBody');
-            const blog = document.querySelector('textarea');
-            body.value = blog.value.replace(/\n/g, '<br>');
-        });
-    </script>
-</body>
-</html>
+<div class="create-blog content">
+    <form action="/blogs" method="POST">
+        <h2>Write a New Blog</h2>
+        <label for="title">Blog title</label>
+        <input type="text" id="title" name="title" placeholder="Unveiling Enchanted Chronicles" autofocus>
+        <label for="snippet">Blog snippet</label>
+        <input type="text" id="snippet" name="snippet" placeholder="Dive into a World of Magic and Wonder">
+        <label for="body">Blog body</label>
+        <textarea id="body" placeholder="As the sun dipped below the horizon, a realm of mysteries awaited, where stars whispered tales and moonbeams wove dreams..."></textarea>
+        <input type="hidden" id="processedBody" name="body">
+        <button type="submit" disabled>Create</button>
+    </form>
+</div>
