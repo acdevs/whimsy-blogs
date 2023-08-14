@@ -1,7 +1,7 @@
 <%- include('./partials/header.ejs') %>
 
 <div class="signin content">
-    <form action="/user/signin" method="POST">
+    <form action="/user/signup" method="POST">
         <h2>Enter the Portal</h2>
         <div class="form">
             <div class="form-illus"></div>
@@ -10,13 +10,15 @@
                     <% if(error.message) {%>
                         <div class="error-msg">*<%= error.message %></div>
                     <% } %>
+                    <label for="alias">Your magical alias?</label>
+                    <input type="text" id="alias" name="alias" autofocus>
                     <label for="email">Whisper your enchanted email.</label>
-                    <input type="email" id="email" name="email" autofocus>
-                    <label for="password">Chant your secret passphrase!</label>
+                    <input type="email" id="email" name="email">
+                    <label for="password">Guard with a secret passphrase!</label>
                     <input type="password" id="password" name="password">
-                    <button type="submit" disabled>Sign in</button>
+                    <button type="submit" disabled>Sign up</button>
                     <div class="sign-other-option">
-                        Don't have an account? <a href="/blogs/signup">Sign up</a>
+                        Already have an account? <a href="/blogs/signin">Sign in</a>
                     </div>
                 </div>
             </div>
@@ -26,11 +28,16 @@
 
 <script>
     const form = document.querySelector('form');
+    const alias = document.querySelector('#alias');
     const email = document.querySelector('#email');
     const password = document.querySelector('#password');
     const button = document.querySelector('button[type="submit"]');
 
+    alias.addEventListener('input', () => {
+        alias.value ? alias.value = alias.value.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()) : "";
+    });
+
     form.addEventListener('input', () => {
-        email.value && password.value ? button.disabled = false : button.disabled = true;
+        alias.value && email.value && password.value ? button.disabled = false : button.disabled = true;
     });
 </script>

@@ -1,19 +1,12 @@
 <%- include('./partials/header.ejs') %>
 
-<div class="blogs content">
+<div class="profile content">
     <div class="content-header">
-        <h2>Latest Posts</h2>
-        <div>
-            <form class="search-form" action="/blogs/search" method="POST">
-                <input class="search-bar" type="text" name="search" placeholder="Search blogs..." autocomplete="false">
-                <button class="search-btn" type="submit" disabled><i class="fa-solid fa-search"></i></button>
-            </form>
-        </div>
+        <h2>My Blogs</h2>
     </div>
 
     <% blogs && blogs.map((blog) => { %>
         <div class="blog">
-            <p class="author"><%= blog.author.alias %></p>
             <h3><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h3>
             <p class="snippet"><%= blog.snippet %></p>
             <p class="timestamp">
@@ -26,7 +19,7 @@
     <% }) %>
 
     <% if (blogs.length === 0) { %>
-        <p>No blogs to read yet. 😢</p>
+        <p>You haven't yet started blogging?</p>
     <% } %>
 
     <div class="pagination">

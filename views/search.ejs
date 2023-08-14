@@ -1,14 +1,22 @@
 <%- include('./partials/header.ejs') %>
 
-<div class="blogs content">
+<div class="search content">
     <div class="content-header">
-        <h2>Latest Posts</h2>
+        <div>
+            <h2>Search Results</h2>
+        </div>
         <div>
             <form class="search-form" action="/blogs/search" method="POST">
-                <input class="search-bar" type="text" name="search" placeholder="Search blogs..." autocomplete="false">
+                <input class="search-bar" type="text" name="search" value="<%= searchTerm %>" placeholder="Search blogs...">
                 <button class="search-btn" type="submit" disabled><i class="fa-solid fa-search"></i></button>
             </form>
         </div>
+    </div>
+
+    <div class="match-count-header">
+        <% if(!matchCount) { %> No match found. 😢 <% } %>
+        <% if(matchCount === 1) { %> 1 match found. 🎉 <% } %>
+        <% if(matchCount > 1) { %> <%= matchCount %> matches found. 🎉 <% } %>
     </div>
 
     <% blogs && blogs.map((blog) => { %>
@@ -24,20 +32,22 @@
             </p>
         </div>
     <% }) %>
-
-    <% if (blogs.length === 0) { %>
-        <p>No blogs to read yet. 😢</p>
-    <% } %>
-
+        
     <div class="pagination">
         <div>
-            <% if ( nextPage ) { %>
-            <a href="/blogs?p=<%= nextPage %>"><i class="fa-solid fa-chevron-left"></i> Older Posts</a>
+            <% if ( prevPage ) { %>
+                <form action="/blogs/search?p=<%= prevPage %>" method="POST">
+                    <input type="hidden" name="search" value="<%= searchTerm %>">
+                    <button type="submit"><a><i class="fa-solid fa-chevron-left"></i> Previous Page</a></button>
+                </form>
             <% } %>
         </div>
         <div>
-            <% if ( prevPage ) { %>
-                <a href="/blogs?p=<%= prevPage %>">Latest Posts <i class="fa-solid fa-chevron-right"></i></a>
+            <% if ( nextPage ) { %>
+                <form action="/blogs/search?p=<%= nextPage %>" method="POST">
+                    <input type="hidden" name="search" value="<%= searchTerm %>">
+                    <button type="submit"><a>Next Page <i class="fa-solid fa-chevron-right"></i></a></button>
+                </form>
             <% } %>
         </div>
     </div>

@@ -1,13 +1,41 @@
 <nav>
     <div class="site-title">
-        <h1><a href="/">Whimsy Blogs✨</a></h1>
+        <h1><a href="/">Whimsy Blogs</a></h1>
         <p>Sparkling Stories to Enchant.</p>
     </div>
     <div class="site-links">
         <a href="/">Blogs</a>
         <a href="/about">About</a>
-        <a href="/blogs/create">New Blog</a>
+        <% if(!res.user) {%>
         <a class="signin-btn" href="/blogs/signin">Sign in</a>
-        <!-- <a class="profile-btn">Aman<i class="fa-solid fa-angle-down"></i></a> -->
+        <% } %>
+        <% if(res.user) { %>
+        <a href="/blogs/create">Write</a>
+
+        <div class="profile-menu">
+            <a class="profile-btn"><%- res.user.alias.split(' ')[0] %><i class="fa-solid fa-angle-down"></i></a>
+            <div class="profile-options">
+              <a href="/user/profile">My Blogs</a>
+              <a href="/user/signout">Sign Out</a>
+            </div>
+          </div>
+        <% } %>
     </div>
 </nav>
+
+<script>
+    const profileBtn = document.querySelector('.profile-btn');
+    const profileOptions = document.querySelector('.profile-options');
+
+    profileBtn.addEventListener('click', () => {
+        profileOptions.classList.toggle('show');
+        profileBtn.classList.toggle('profile-btn-active');
+    })
+    
+    window.addEventListener('click', (e) => {
+        if(!e.target.matches('.profile-btn')) {
+            profileOptions.classList.remove('show');
+            profileBtn.classList.remove('profile-btn-active');
+        }
+    })
+</script>
