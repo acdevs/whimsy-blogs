@@ -23,7 +23,7 @@ const blog_index = (req, res) => {
         const hasPrevPage = prevPage >= 1;
 
         res.render("index", { 
-            title: "All my Blogs", 
+            title: "Latest Blogs", 
             blogs: data,
             currentPage: page,
             nextPage: hasNextPage ? nextPage : null,
