@@ -10,8 +10,7 @@
         <a class="signin-btn" href="/blogs/signin">Sign in</a>
         <% } %>
         <% if(res.user) { %>
-        <a href="/blogs/create">Write</a>
-
+        <a href="/blogs/create"><i class="fa-regular fa-pen-to-square"></i> Write</a>
         <div class="profile-menu">
             <a class="profile-btn"><%- res.user.alias.split(' ')[0] %><i class="fa-solid fa-angle-down"></i></a>
             <div class="profile-options">

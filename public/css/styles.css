@@ -13,7 +13,6 @@
 }
 *{
     -webkit-tap-highlight-color: none;
-    -webkit-touch-callout: none;
 }
 body::-webkit-scrollbar{
     width: 0;
@@ -23,11 +22,6 @@ body{
     padding: 0;
     font-family: var(--body);
     font-size: 1.2rem;
-    background-image: url(../res/background-illustration.jpg);
-    background-size: 40%;
-    background-repeat: no-repeat;
-    background-position: top -40% right 0;
-    background-attachment: fixed;
 }
 h1, h2, h3, a, p{
     margin: 0;
@@ -49,6 +43,9 @@ nav{
     padding: 0.75rem 2rem;
     background-color: #f5f5f5;
     margin-bottom: 5rem;
+}
+.site-title{
+    position: relative;
 }
 .site-title > h1{
     font-size: 3rem;
@@ -347,7 +344,7 @@ input#title::placeholder{
 }
 .create-blog button, 
 .edit-blog button, 
-.signin button{
+.signin button, .signup button{
     font-family: var(--body);
     font-size: 1rem;
     margin-top: 20px;
@@ -359,7 +356,7 @@ input#title::placeholder{
 }
 .create-blog button:disabled, 
 .edit-blog button:disabled, 
-.signin button:disabled{
+.signin button:disabled, .signup button:disabled{
     background-color: #8e8e8e;
 }
 .form{
@@ -370,9 +367,9 @@ input#title::placeholder{
 }
 .form > div{
     height: auto;
-    width: calc(50%);
 }
 .form-elements{
+    width: calc(50%);
     box-sizing: border-box;
     display: flex;
     justify-content: center;
@@ -398,7 +395,7 @@ input#title::placeholder{
     margin-top: 8px;
 }
 .form-elements .error-msg{
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #ff0000;
     padding: 0.5rem;
     background-color: #ffefef;
@@ -407,10 +404,17 @@ input#title::placeholder{
 }
 .form-illus{
     height: 400px !important;
-    background-image: url(../res/portal.jpg);
+    width: calc(50%) !important;
+    margin: 0 auto;
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center right;
+    background-position: center;
+}
+.signin .form-illus{
+    background-image: url(../res/signin-illustration-image.jpg);
+}
+.signup .form-illus{
+    background-image: url(../res/signup-illustration-image.jpg);
 }
 .sign-other-option{
     position: relative;
