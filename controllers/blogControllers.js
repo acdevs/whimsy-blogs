@@ -38,6 +38,15 @@ const blog_index = (req, res) => {
     })
 }
 
+const blog_about_get = (req, res) => {
+    res.render("about", { 
+        title: "About", 
+        res: {
+            user : req.user,
+        }
+    })
+}
+
 const blog_post = (req, res) => {
     Blog.findById(req.params.id)
     .then((data) => {
@@ -224,6 +233,7 @@ const blog_signup_get = (req, res) => {
 
 module.exports = {
     blog_index,
+    blog_about_get,
     blog_post,
     blog_create_get,
     blog_create_post,

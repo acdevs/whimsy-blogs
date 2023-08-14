@@ -4,6 +4,7 @@ const router = express.Router()
 
 const { 
     blog_index,
+    blog_about_get,
     blog_post,
     blog_create_get,
     blog_create_post,
@@ -18,6 +19,8 @@ const {
 router.use(requireAuth)
 
 router.get("/", blog_index)
+
+router.get("/about", blog_about_get)
 
 router.get("/signin", blog_signin_get)
 
