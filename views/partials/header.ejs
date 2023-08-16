@@ -1,4 +1,4 @@
-<nav>
+<nav class="nav">
     <div class="site-title">
         <h1><a href="/">Whimsy Blogs</a></h1>
         <p>Sparkling Stories to Enchant.</p>
@@ -11,18 +11,27 @@
         <% } %>
         <% if(res.user) { %>
         <a href="/blogs/create"><i class="fa-regular fa-pen-to-square"></i> Write</a>
-        <div class="profile-menu">
+        <span class="profile-menu">
             <a class="profile-btn"><%- res.user.alias.split(' ')[0] %><i class="fa-solid fa-angle-down"></i></a>
             <div class="profile-options">
               <a href="/user/profile">My Blogs</a>
               <a href="/user/signout">Sign Out</a>
             </div>
-          </div>
+        </span>
         <% } %>
     </div>
 </nav>
 
 <script>
+    window.onscroll = () => {scrollFunction()};
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 125  || document.documentElement.scrollTop > 125) {
+            document.querySelector(".nav").classList.add("nav-sticky");
+        } else {
+            document.querySelector(".nav").classList.remove("nav-sticky");
+        }
+    }
     const profileBtn = document.querySelector('.profile-btn');
     const profileOptions = document.querySelector('.profile-options');
 

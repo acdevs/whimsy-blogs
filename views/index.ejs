@@ -17,6 +17,7 @@
             <h3><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h3>
             <p class="snippet"><%= blog.snippet %></p>
             <p class="timestamp">
+                <%= blog.readingTime %> • 
                 <% if(new Date(blog.createdAt) < new Date(blog.updatedAt)){ %>
                     (edited)
                 <% } %>

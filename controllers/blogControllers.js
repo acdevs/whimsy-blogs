@@ -1,4 +1,5 @@
 const dateFns = require("date-fns")
+const readingTime = require('reading-time')
 const Blog = require("../models/blog")
 
 const perPage = 10
@@ -13,6 +14,7 @@ const blog_index = (req, res) => {
     .then( async (data) => {
         data.forEach((blog) => {
             blog.timestamp = dateFns.formatDistanceToNow(new Date(blog.updatedAt), { addSuffix: true })
+            blog.readingTime = readingTime(blog.body).text
         })
         
         const count = await Blog.count({});
@@ -176,6 +178,7 @@ const blog_search_post = async (req, res) => {
     .then((data) => {
         data.forEach(async (blog) => {
             blog.timestamp = dateFns.formatDistanceToNow(new Date(blog.updatedAt), { addSuffix: true })
+            blog.readingTime = readingTime(blog.body).text
         })
 
         const pageCount = Math.ceil(matchCount / perPage);
