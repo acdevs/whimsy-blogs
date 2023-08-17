@@ -12,11 +12,12 @@
     </div>
 
     <div class="match-count-header">
-        <% if(!matchCount) { %> No match found. 😢 <% } %>
-        <% if(matchCount === 1) { %> 1 match found. 🎉 <% } %>
-        <% if(matchCount > 1) { %> <%= matchCount %> matches found. 🎉 <% } %>
+        <% if(!matchCount) { %>Uh oh! No match found. <% } %>
+        <% if(matchCount === 1) { %> 1 match found. <% } %>
+        <% if(matchCount > 1) { %> <%= matchCount %> matches found. <% } %>
     </div>
     
+    <div>
     <% blogs && blogs.map((blog) => { %>
         <div class="blog">
             <p class="author"><%= blog.author.alias %></p>
@@ -31,6 +32,7 @@
             </p>
         </div>
     <% }) %>
+    </div>
         
     <div class="pagination">
         <div>

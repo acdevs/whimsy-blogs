@@ -29,6 +29,6 @@ const blogSchema = new mongoose.Schema({
 const Blog = mongoose.model('Blog', blogSchema) //singular name of the collection
 
 // create index for search
-blogSchema.index({title: 'text', snippet : 'text', body : 'text'})
+blogSchema.index({title: 'text', snippet : 'text', body : 'text', 'author.alias' : 'text'})
 
 module.exports = Blog

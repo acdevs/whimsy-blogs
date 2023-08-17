@@ -235,7 +235,7 @@ button{
     border: 1px solid #000;
 }
 .match-count-header{
-    font-family: var(--heading);
+    font-family: var(--body);
     text-transform: capitalize;
     font-size: 1.5rem;
     margin: -1rem 0 2rem;
@@ -246,10 +246,10 @@ button{
     background-color: #f5f5f5;
     border-bottom: 1px solid #E4E4E4;
 }
-.blog:nth-of-type(2){
+.blog:nth-of-type(1){
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
-.blog:nth-last-of-type(2){
+.blog:nth-last-of-type(1){
     border-radius: 0 0 var(--border-radius) var(--border-radius);
     border-bottom: 0;
 }
@@ -280,6 +280,12 @@ button{
     right: 0;
     margin: 1.75rem 2rem 0 0;
     font-size: 1rem;
+}
+.profile .blog .timestamp{
+    top: unset;
+    right: 0;
+    bottom: 0;
+    margin: 0 2rem 1rem 0;
 }
 .content p {
     line-height: 1.6;

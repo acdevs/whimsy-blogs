@@ -11,6 +11,7 @@
         </div>
     </div>
 
+    <div>
     <% blogs && blogs.map((blog) => { %>
         <div class="blog">
             <p class="author"><%= blog.author.alias %></p>
@@ -25,6 +26,7 @@
             </p>
         </div>
     <% }) %>
+    </div>
 
     <% if (blogs.length === 0) { %>
         <p>No blogs to read yet. 😢</p>
