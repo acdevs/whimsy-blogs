@@ -97,7 +97,7 @@ h3{
     width: 50px;
 }
 .blog h3{
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     line-height: 1.2;
 }
 .timestamp{
@@ -108,7 +108,7 @@ h3{
     font-size: 1rem;
 }
 .content p {
-    line-height: 1.6;
+    line-height: 1.5;
 }
 .content .snippet{
     margin-bottom: 2.5rem;
@@ -118,7 +118,13 @@ h3{
     padding: 1rem;
 }
 .posts{
-    padding: 4rem 1rem 2rem;
+    padding: 4rem 1rem 2.5rem;
+}
+.posts h2{
+    font-size: 1.75rem;
+}
+.posts .author-container{
+    padding: 0.5rem;
 }
 .posts .author-container .author{
     font-size: 1.2rem;
