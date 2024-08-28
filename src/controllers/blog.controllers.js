@@ -1,6 +1,6 @@
-const dateFns = require("date-fns")
-const readingTime = require('reading-time')
-const Blog = require("../models/blog")
+import dateFns from "date-fns"
+import readingTime from 'reading-time'
+import Blog from "../models/blog.model.js"
 
 const perPage = 10
 
@@ -53,7 +53,7 @@ const blog_post = (req, res) => {
     Blog.findById(req.params.id)
     .then((data) => {
         if(!req.user){
-            res.render("posts", { 
+            res.render("./blogs/posts", { 
                 title: "Blog Post", 
                 blog: data, 
                 res: {
@@ -65,7 +65,7 @@ const blog_post = (req, res) => {
         }
         let isAuthor = false;
         if(req.user._id.toString() == data.author.id.toString()) isAuthor = true;
-        res.render("posts", { 
+        res.render("./blogs/posts", { 
             title: "Blog Post", 
             blog: data, 
             res: {
@@ -84,7 +84,7 @@ const blog_create_get = (req, res) => {
         res.redirect("/blogs/signin")
         return
     }
-    res.render("create", { 
+    res.render("./blogs/create", { 
         title: "Create a new blog",
         res: {
             user : req.user,
@@ -126,7 +126,7 @@ const blog_edit_get = (req, res) => {
             res.redirect("/blogs/signin")
             return
         }
-        res.render("edit", { 
+        res.render("./blogs/edit", { 
             title: "Editor", 
             blog: data,
             res: {
@@ -187,7 +187,7 @@ const blog_search_post = async (req, res) => {
         const hasNextPage = nextPage <= pageCount;
         const hasPrevPage = prevPage >= 1;
 
-        res.render("search", { 
+        res.render("./blogs/search", { 
             title: "Search Results", 
             blogs: data, 
             currentPage: page,
@@ -210,7 +210,7 @@ const blog_signin_get = (req, res) => {
         res.redirect("/blogs/")
         return
     }
-    res.render("signin", { 
+    res.render("./auths/signin", { 
         title: "Sign In", 
         error: { message : null },
         res: {
@@ -224,7 +224,7 @@ const blog_signup_get = (req, res) => {
         res.redirect("/blogs/")
         return
     }
-    res.render("signup", { 
+    res.render("./auths/signup", { 
         title: "Sign Up", 
         error: { message : null },
         res: {
@@ -234,7 +234,7 @@ const blog_signup_get = (req, res) => {
 }
 
 
-module.exports = {
+export {
     blog_index,
     blog_about_get,
     blog_post,

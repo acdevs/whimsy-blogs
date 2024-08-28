@@ -1,8 +1,6 @@
-const express = require('express')
-const { requireAuth } = require('../middleware/requireAuth')
-const router = express.Router()
-
-const { 
+import express from 'express'
+import { requireAuth } from '../middlewares/auth.middlewares.js'
+import { 
     blog_index,
     blog_about_get,
     blog_post,
@@ -14,7 +12,9 @@ const {
     blog_search_post,
     blog_signin_get,
     blog_signup_get,
-} = require('../controllers/blogControllers')
+} from '../controllers/blog.controllers.js'
+
+const router = express.Router()
 
 router.use(requireAuth)
 
@@ -40,4 +40,4 @@ router.post("/edit", blog_edit_post)
 
 router.post("/search", blog_search_post)
 
-module.exports = router
+export default router

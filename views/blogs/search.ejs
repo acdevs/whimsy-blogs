@@ -1,14 +1,8 @@
-<%- include('./partials/header.ejs') %>
+<%- include('../partials/header.ejs') %>
 
 <div class="search content">
     <div class="content-header">
         <h2>Search Results</h2>     
-        <div>
-            <form class="search-form" action="/blogs/search" method="POST">
-                <input class="search-bar" type="text" name="search" value="<%= searchTerm %>" placeholder="Search blogs...">
-                <button class="search-btn" type="submit" disabled><i class="fa-solid fa-search"></i></button>
-            </form>
-        </div>
     </div>
 
     <div class="match-count-header">

@@ -1,9 +1,16 @@
 <nav class="nav">
-    <div class="site-title">
-        <h1><a href="/">Whimsy Blogs</a></h1>
-        <p>Sparkling Stories to Enchant.</p>
+    <div class="nav-left-inline-top">
+        <div class="site-title">
+            <h1><a href="/">Whimsy Blogs</a></h1>
+        </div>
+        <div class="site-search">
+            <form class="search-form" action="/blogs/search" method="POST">
+                <button class="search-btn" type="submit" disabled><i class="fa-solid fa-search"></i></button>
+                <input class="search-bar" type="text" name="search" placeholder="Search blogs..." autocomplete="false">
+            </form>
+        </div>
     </div>
-    <div class="site-links">
+    <div class="nav-links">
         <a href="/">Blogs</a>
         <a href="/blogs/about">About</a>
         <% if(!res.user) {%>
@@ -14,13 +21,16 @@
         <span class="profile-menu">
             <a class="profile-btn"><%- res.user.alias.split(' ')[0] %><i class="fa-solid fa-angle-down"></i></a>
             <div class="profile-options">
-              <a href="/user/profile">My Blogs</a>
-              <a href="/user/signout">Sign Out</a>
+              <a href="/users/profile">My Blogs</a>
+              <a href="/users/signout">Sign Out</a>
             </div>
         </span>
         <% } %>
     </div>
 </nav>
+<div class="sub-nav">
+    <p>Become a pro member and get access to exclusive features! ✨</p>
+</div>
 
 <script>
     window.onscroll = () => {scrollFunction()};

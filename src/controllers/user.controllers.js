@@ -1,9 +1,8 @@
-const User = require("../models/user")
-const Blog = require("../models/blog")
-const dateFns = require("date-fns")
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
-
+import dateFns from "date-fns"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+import User from "../models/user.model.js"
+import Blog from "../models/blog.model.js"
 
 const user_profile_get = (req, res) => {
     if( !req.user ){
@@ -30,14 +29,14 @@ const user_profile_get = (req, res) => {
         const hasNextPage = nextPage <= pageCount;
         const hasPrevPage = prevPage >= 1;
 
-        res.render("profile", {
+        res.render("./users/profile", {
             title: "All my Blogs", 
             blogs: data,
             currentPage: page,
             nextPage: hasNextPage ? nextPage : null,
             prevPage: hasPrevPage ? prevPage : null,
             res: {
-                user : req.user,
+            user : req.user,
             }
         })
     })
@@ -57,7 +56,7 @@ const user_signup_post = (req, res) => {
         .then((user) => {
             console.log(user)
             if(user) {
-                res.render("signup", { 
+                res.render("./auths/signup", { 
                     title: "Sign Up", 
                     error: {
                         message : "Your email is already registered."
@@ -97,7 +96,7 @@ const user_signin_post = (req, res) => {
     User.findOne({email})
     .then((user) => {
         if(!user) {
-            res.render("signin", { 
+            res.render("./auths/signin", { 
                 title: "Sign In", 
                 error: {
                     message : "Your email is not registered yet."
@@ -110,7 +109,7 @@ const user_signin_post = (req, res) => {
         }
         const isPasswordCorrect = bcrypt.compareSync(password, user.password)
         if(!isPasswordCorrect) {
-            res.render("signin", { 
+            res.render("./auths/signin", { 
                 title: "Sign In", 
                 error: {
                     message : "Probably you forgot your passphrase."
@@ -136,7 +135,7 @@ const user_signout_get = (req, res) => {
     res.redirect("/blogs/")
 }
 
-module.exports = {
+export {
     user_signin_post,
     user_signup_post,
     user_signout_get,

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const blogSchema = new mongoose.Schema({
     title: {
@@ -31,4 +31,4 @@ const Blog = mongoose.model('Blog', blogSchema) //singular name of the collectio
 // create index for search
 blogSchema.index({title: 'text', snippet : 'text', body : 'text', 'author.alias' : 'text'})
 
-module.exports = Blog
+export default Blog

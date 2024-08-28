@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken")
-const User = require("../models/user")
+import jwt from "jsonwebtoken"
+import User from "../models/user.model.js"
 
 const requireAuth = (req, res, next) => {
 
@@ -15,17 +15,15 @@ const requireAuth = (req, res, next) => {
             return
         }
         User.findById(decodedToken.id)
-            .then((user) => {
-                req.user = user
-                next()
-            })
-            .catch((err) => {
-                res.render("404", { title: "404" })
-                return
-            })
+        .then((user) => {
+            req.user = user
+            next()
+        })
+        .catch((err) => {
+            res.render("404", { title: "404" })
+            return
+        })
     })
-    
-
 }
 
-module.exports = { requireAuth } 
+export { requireAuth }
