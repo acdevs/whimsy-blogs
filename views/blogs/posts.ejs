@@ -2,27 +2,62 @@
 
 <div class="posts content">
     <h2><%= blog.title %></h2>
-    <div class="author-container">
-      <p class="author"><%= blog.author.alias %></p>
-      <p class="date"><%= new Date(blog.createdAt).toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) %></p>
-    </div>
-    <p class="body"><%- blog.body %></p>
 
-    <% if(res.user && res.isAuthor) { %>
-      <div class="tool-btns">
-        <!-- <button class="like-btn" data-likes="22"><i class="fa-regular fa-heart"></i></button> -->
-        <a href="/blogs/edit/<%= blog._id %>"><button class="edit-btn"><i class="fa-solid fa-pen"></i></button></a>
-        <button class="delete-btn" data-doc="<%= blog._id %>"><i class="fa-solid fa-eraser"></i></button>
+    <div class="author-container">
+      <!-- src="//author.profilePic//" -->
+      <img src="/res/sample-profile-pic.jpg" alt="<%= blog.author.fullName %>" class="profile-pic">
+      <div>
+        <p class="author"><%= blog.author.fullName %><span class="dot">•</span><a class="author-follow-btn">follow</a></p>
+        <p class="date"><%= new Date(blog.createdAt).toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) %><span class="dot">•</span><%= blog.readTime %></p>
       </div>
-    <% } %>
+    </div>
+
+    <div class="posts-options">
+      <div class="posts-options-left">
+        <button class="posts-options-likes"><span class="material-symbols-outlined">thumb_up</span></button>
+        <% if(blog.likes.length > 0){ %>
+          <span class="posts-options-count likes-count"><%= blog.likes.length %></span>
+        <% } %>
+        <button class="posts-options-comments"><span class="material-symbols-outlined">forum</span></button>
+        <% if(blog.comments.length > 0){ %>
+          <span class="posts-options-count comments-count"><%= blog.comments.length %></span>
+        <% } %>
+      </div>
+      <div class="posts-options-right">
+        <button class="save-btn"><span class="material-symbols-outlined">bookmark_add</span></button>
+        <% if(res.user && res.isAuthor) { %>
+          <a href="/blogs/edit/<%= blog._id %>"><button class="edit-btn"><span class="material-symbols-outlined">edit</span></button></a>
+          <button class="delete-btn" data-doc="<%= blog._id %>"><span class="material-symbols-outlined">ink_eraser</span></button>
+        <% } %>
+      </div>
+    </div>
+
+    <p class="body"><%- blog.content %></p>
 
 </div>
 
+<div class="comments content">
+    <h3>Comments</h3>
+    <div class="comments-container">
+      <% blog.comments.forEach(comment => { %>
+        <div class="comment">
+          <div class="comment-author">
+            <img src="/res/sample-profile-pic.jpg" alt="<%= comment.author.fullName %>" class="profile-pic">
+            <p class="author"><%= comment.author.fullName %></p>
+          </div>
+          <p class="comment-body"><%= comment.content %></p>
+        </div>
+      <% }) %>
+    </div>
+</div>
+
+<!-- popups -->
+
 <div class="popup-delete">
     <div>
-      <p>Are you sure you want to erase this blog?</p>
+      <p>Are you sure you want to erase this blog? This action cannot be undone at a later time.</p>
       <div class="delete-btns">
-        <button class="delete-yes">Erase</button>
+        <button class="delete-yes">Proceed</button>
         <button class="delete-no">Cancel</button>
       </div>
     </div>

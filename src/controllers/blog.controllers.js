@@ -1,6 +1,7 @@
 import dateFns from "date-fns"
 import readingTime from 'reading-time'
 import Blog from "../models/blog.model.js"
+import User from "../models/user.model.js"
 
 const perPage = 10
 
@@ -14,7 +15,7 @@ const blog_index = (req, res) => {
     .then( async (data) => {
         data.forEach((blog) => {
             blog.timestamp = dateFns.formatDistanceToNow(new Date(blog.updatedAt), { addSuffix: true })
-            blog.readingTime = readingTime(blog.body).text
+            blog.readingTime = readingTime(blog.content).text
         })
         
         const count = await Blog.count({});
@@ -25,7 +26,7 @@ const blog_index = (req, res) => {
         const hasPrevPage = prevPage >= 1;
 
         res.render("index", { 
-            title: "Latest Blogs", 
+            title: "Home", 
             blogs: data,
             currentPage: page,
             nextPage: hasNextPage ? nextPage : null,
@@ -37,6 +38,7 @@ const blog_index = (req, res) => {
     })
     .catch((err) => {
         res.status(404).render("404", { title: "404" })
+        console.log(err)
     })
 }
 
@@ -50,12 +52,15 @@ const blog_about_get = (req, res) => {
 }
 
 const blog_post = (req, res) => {
-    Blog.findById(req.params.id)
-    .then((data) => {
+    const slug = req.params.slug
+    Blog.findOne({slug})
+    .then(async (blog) => {
+        let author = User.findOne({ _id: blog.author.userId })
         if(!req.user){
             res.render("./blogs/posts", { 
                 title: "Blog Post", 
-                blog: data, 
+                blog,
+                author,
                 res: {
                     user : null, 
                     isAuthor : null
@@ -64,10 +69,11 @@ const blog_post = (req, res) => {
             return
         }
         let isAuthor = false;
-        if(req.user._id.toString() == data.author.id.toString()) isAuthor = true;
+        if(req.user._id.toString() == blog.author.userId.toString()) isAuthor = true
         res.render("./blogs/posts", { 
             title: "Blog Post", 
-            blog: data, 
+            blog,
+            author,
             res: {
                 user : req.user, 
                 isAuthor : isAuthor
@@ -76,6 +82,7 @@ const blog_post = (req, res) => {
     })
     .catch((err) => {
         res.status(404).render("404", { title: "404" })
+        console.log(err)
     })
 }
 
@@ -93,14 +100,16 @@ const blog_create_get = (req, res) => {
 }
 
 const blog_create_post = (req, res) => {
-    const {title, snippet, body} = req.body
-    const blog = new Blog({ title, snippet, body, 'author.id' : req.user._id, 'author.alias' : req.user.alias })
+    const {title, snippet, content} = req.body
+    const slug = title.replace(/[\W_]+/g, "-").toLowerCase()
+    const blog = new Blog({slug, title, snippet, content, 'author.userId' : req.user._id, 'author.fullName' : req.user.fullName, readingTime : readingTime(content).text })
     blog.save()
     .then(() => {
         res.redirect("/blogs")
     })
     .catch((err) => {
         res.status(404).render("404", { title: "404" })
+        console.log(err)
     })
 }
 

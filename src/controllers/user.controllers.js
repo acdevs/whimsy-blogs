@@ -50,16 +50,15 @@ const user_signup_post = (req, res) => {
         res.redirect("/blogs/")
         return
     }
-    const {alias, email, password} = req.body
+    const {fullName, email, password} = req.body
 
     User.findOne({email})
         .then((user) => {
-            console.log(user)
             if(user) {
                 res.render("./auths/signup", { 
                     title: "Sign Up", 
                     error: {
-                        message : "Your email is already registered."
+                        message : "You've already registered."
                     },
                     res: {
                         user : req.user,
@@ -68,20 +67,35 @@ const user_signup_post = (req, res) => {
                 return
             }
             const hashedPassword = bcrypt.hashSync(password, 10)
-            const userm = new User({
-                alias,
+            const salt = Math.floor(Math.random() * 999) + 1;
+            const username = email.substring(0, email.indexOf('@')).replace(/[._]/g, "-").toLowerCase() + "-" + salt;
+            const userObj = new User({
+                username,
+                fullName,
                 email,
                 password: hashedPassword
             })
-            userm.save()
+            userObj.save()
             .then((user) => {
                 const token = jwt.sign({id: user._id}, process.env.SESSION_SECRET)
                 res.cookie('user_session_token', token, {httpOnly: true, maxAge: 1000 * 60 * 60 * 24})
                 res.redirect("/blogs")
             })
+            .catch((err) => {
+                res.render("./auths/signup", { 
+                    title: "Sign Up", 
+                    error: {
+                        message : "Something went wrong."
+                    },
+                    res: {
+                        user : req.user,
+                    }
+                })
+            })
         })
         .catch((err) => {
             res.status(404).render("404", { title: "404" })
+            console.log(err)
         })
 }
 
@@ -99,7 +113,7 @@ const user_signin_post = (req, res) => {
             res.render("./auths/signin", { 
                 title: "Sign In", 
                 error: {
-                    message : "Your email is not registered yet."
+                    message : "You've not registered yet."
                 },
                 res: {
                     user : req.user,
@@ -112,7 +126,7 @@ const user_signin_post = (req, res) => {
             res.render("./auths/signin", { 
                 title: "Sign In", 
                 error: {
-                    message : "Probably you forgot your passphrase."
+                    message : "You've got invalid credentials."
                 },
                 res: {
                     user : req.user,

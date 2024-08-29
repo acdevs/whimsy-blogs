@@ -1,28 +1,28 @@
 <%- include('../partials/header.ejs') %>
 
 <div class="create-blog content">
-    <form action="/blogs" method="POST">
+    <form class="create-blog-form" action="/blogs" method="POST">
         <h2>Write a New Blog</h2>
         <label for="title">Blog title</label>
-        <input type="text" id="title" name="title" placeholder="Unveiling Enchanted Chronicles" autofocus>
+        <input type="text" class="input-title" name="title" placeholder="Unveiling Enchanted Chronicles" autofocus>
         <label for="snippet">Blog snippet</label>
-        <input type="text" id="snippet" name="snippet" placeholder="Dive into a World of Magic and Wonder">
+        <input type="text" class="input-snippet" name="snippet" placeholder="Dive into a World of Magic and Wonder">
         <label for="body">Blog body</label>
-        <textarea id="body" placeholder="As the sun dipped below the horizon, a realm of mysteries awaited, where stars whispered tales and moonbeams wove dreams..."></textarea>
-        <input type="hidden" id="processedBody" name="body">
+        <textarea class="textarea-content" placeholder="As the sun dipped below the horizon, a realm of mysteries awaited, where stars whispered tales and moonbeams wove dreams..."></textarea>
+        <input type="hidden" class="input-processed-content" name="content">
         <button type="submit" disabled>Create</button>
     </form>
 </div>
 
 <script>
-    const form = document.querySelector('form');
-    const title = document.querySelector('#title');
-    const snip = document.querySelector('#snippet');
-    const body = document.querySelector('textarea');
-    const button = document.querySelector('button[type="submit"]');
+    const createBlogForm = document.querySelector('.create-blog-form');
+    const title = createBlogForm.querySelector('.input-title');
+    const snip = createBlogForm.querySelector('.input-snippet');
+    const body = createBlogForm.querySelector('.textarea-content');
+    const button = createBlogForm.querySelector('button[type="submit"]');
 
-    form.addEventListener('submit', () => {
-        const blog = document.querySelector('#processedBody');
+    createBlogForm.addEventListener('submit', () => {
+        const blog = document.querySelector('.input-processed-content');
         blog.value = body.value.replace(/\n/g, '<br>');
     });
 
@@ -34,7 +34,7 @@
         snip.value ? snip.value = sentenceCase(snip.value) : "";
     });
 
-    form.addEventListener('input', () => {
+    createBlogForm.addEventListener('input', () => {
         title.value && snip.value && body.value ? button.disabled = false : button.disabled = true;
     });
     function sentenceCase(str) {

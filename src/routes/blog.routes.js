@@ -30,11 +30,11 @@ router.get("/create", blog_create_get)
 
 router.post("/", blog_create_post)
 
-router.get("/:id", blog_post)
+router.get("/:slug", blog_post)
 
 router.delete('/:id', blog_delete)
 
-router.get('/edit/:id', blog_edit_get)
+router.get('/edit/:slug', blog_edit_get)
 
 router.post("/edit", blog_edit_post)
 

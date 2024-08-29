@@ -43,14 +43,14 @@ app.set('layout', './layouts/main')
 import homeRoutes from "./routes/home.routes.js";
 app.use('/', homeRoutes)
 
-import healthCheckRoutes from "./routes/heathcheck.routes.js";
-app.use('/api/heathcheck', healthCheckRoutes);
+import userRoutes from "./routes/user.routes.js";
+app.use('/users', userRoutes)
 
 import blogRoutes from "./routes/blog.routes.js";
 app.use('/blogs', blogRoutes)
 
-import userRoutes from "./routes/user.routes.js";
-app.use('/users', userRoutes)
+import healthCheckRoutes from "./routes/heathcheck.routes.js";
+app.use('/api/heathcheck', healthCheckRoutes);
 
 app.use((req, res) => {
     res.status(404).render("404", { title: "404" })
