@@ -5,41 +5,64 @@ import User from "../models/user.model.js"
 
 const perPage = 10
 
-const blog_index = (req, res) => {
+const blog_index = async (req, res) => {
+    const feed = req.query?.feed
     const page = req.query.p || 1
-    
-    Blog.find()
-    .sort({ createdAt: -1 })
-    .skip(page * perPage - perPage)
-    .limit(perPage)
-    .then( async (data) => {
-        data.forEach((blog) => {
-            blog.timestamp = dateFns.formatDistanceToNow(new Date(blog.updatedAt), { addSuffix: true })
-            blog.readingTime = readingTime(blog.content).text
-        })
-        
-        const count = await Blog.count({});
+    let blogList = []
+    let count = 0
+    try{
+        if(!feed){
+            [blogList, count] = await Blog.find()
+                .sort({ createdAt: -1 })
+                .skip(page * perPage - perPage)
+                .limit(perPage)
+                .then( async (blogs) => {
+                    blogs.forEach((blog) => {
+                        blog.timestamp = dateFns.formatDistanceToNow(new Date(blog.updatedAt), { addSuffix: true })
+                    })
+                    count = await Blog.count({});
+                    return [blogs, count]
+                })
+        } 
+        else if(feed == "following"){
+            if( !req.user ){
+                res.redirect("/blogs/signin")
+                return
+            }
+            [blogList, count] = await Blog.find({ 'author.userId' : { $in: req.user.following } })
+                .sort({ createdAt: -1 })
+                .skip(page * perPage - perPage)
+                .limit(perPage)
+                .then( async (blogs) => {
+                    blogs.forEach((blog) => {
+                        blog.timestamp = dateFns.formatDistanceToNow(new Date(blog.updatedAt), { addSuffix: true })
+                    })
+                    count = await Blog.count({ 'author.userId' : { $in: req.user.following } });
+                    return [blogs, count];
+                })
+        }
         const pageCount = Math.ceil(count / perPage);
         const nextPage = parseInt(page) + 1;
         const prevPage = parseInt(page) - 1;
         const hasNextPage = nextPage <= pageCount;
         const hasPrevPage = prevPage >= 1;
-
+    
         res.render("index", { 
             title: "Home", 
-            blogs: data,
+            blogs : blogList,
             currentPage: page,
             nextPage: hasNextPage ? nextPage : null,
             prevPage: hasPrevPage ? prevPage : null,
+            tab : feed,
             res: {
                 user : req.user,
             }
         })
-    })
-    .catch((err) => {
+    }
+    catch(err){
         res.status(404).render("404", { title: "404" })
         console.log(err)
-    })
+    }
 }
 
 const blog_about_get = (req, res) => {
@@ -162,10 +185,10 @@ const blog_edit_post = (req, res) => {
     })
 }
 
-const blog_search_post = async (req, res) => {
+const blog_search_get = async (req, res) => {
     const page = req.query.p || 1
-    const searchTerm = req.body.search
-    const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "")
+    const searchTerm = req.query.q
+    const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9 ]/g, " ")
 
     const matchCount = await Blog.find({
             $text: { $search: searchNoSpecialChar }
@@ -174,8 +197,7 @@ const blog_search_post = async (req, res) => {
     Blog.find({
         $or: [
             { title: { $regex: searchNoSpecialChar, $options: "i" } },
-            { snippet: { $regex: searchNoSpecialChar, $options: "i" } },
-            { body: { $regex: searchNoSpecialChar, $options: "i" } }
+            { snippet: { $regex: searchNoSpecialChar, $options: "i" } }
         ],
             $text: { $search: searchNoSpecialChar }
         },
@@ -184,10 +206,9 @@ const blog_search_post = async (req, res) => {
     .sort({ score: { $meta: "textScore" }, posts: -1 })
     .skip(page * perPage - perPage)
     .limit(perPage)
-    .then((data) => {
-        data.forEach(async (blog) => {
+    .then((blogs) => {
+        blogs.forEach(async (blog) => {
             blog.timestamp = dateFns.formatDistanceToNow(new Date(blog.updatedAt), { addSuffix: true })
-            blog.readingTime = readingTime(blog.body).text
         })
 
         const pageCount = Math.ceil(matchCount / perPage);
@@ -198,12 +219,13 @@ const blog_search_post = async (req, res) => {
 
         res.render("./blogs/search", { 
             title: "Search Results", 
-            blogs: data, 
+            blogs, 
             currentPage: page,
             nextPage: hasNextPage ? nextPage : null,
             prevPage: hasPrevPage ? prevPage : null,
             searchTerm,
             matchCount,
+            tab : null,
             res: {
                 user : req.user,
             }
@@ -211,6 +233,55 @@ const blog_search_post = async (req, res) => {
     })
     .catch((err) => {
         res.status(404).render("404", { title: "404" })
+        console.log(err)
+    })
+}
+
+const user_search_get = async (req, res) => {
+    const page = req.query.p || 1
+    const searchTerm = req.query.q
+    const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9 ]/g, " ")
+
+    const matchCount = await User.find({
+            $text: { $search: searchNoSpecialChar }
+        }).count({})
+          
+    User.find({
+        $or: [
+            { fullName: { $regex: searchNoSpecialChar, $options: "i" } },
+            { username: { $regex: searchNoSpecialChar, $options: "i" } }
+        ],
+            $text: { $search: searchNoSpecialChar }
+        },
+        { score: { $meta: "textScore" } 
+    })
+    .sort({ score: { $meta: "textScore" }, posts: -1 })
+    .skip(page * perPage - perPage)
+    .limit(perPage)
+    .then((users) => {
+        const pageCount = Math.ceil(matchCount / perPage);
+        const nextPage = parseInt(page) + 1;
+        const prevPage = parseInt(page) - 1;
+        const hasNextPage = nextPage <= pageCount;
+        const hasPrevPage = prevPage >= 1;
+
+        res.render("./blogs/search", { 
+            title: "Search Results", 
+            users, 
+            currentPage: page,
+            nextPage: hasNextPage ? nextPage : null,
+            prevPage: hasPrevPage ? prevPage : null,
+            searchTerm,
+            matchCount,
+            tab : "users",
+            res: {
+                user : req.user,
+            }
+        })
+    })
+    .catch((err) => {
+        res.status(404).render("404", { title: "404" })
+        console.log(err)
     })
 }
 
@@ -252,7 +323,8 @@ export {
     blog_delete,
     blog_edit_get,
     blog_edit_post,
-    blog_search_post,
+    blog_search_get,
+    user_search_get,
     blog_signin_get,
     blog_signup_get,
 }

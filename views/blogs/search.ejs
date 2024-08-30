@@ -2,28 +2,41 @@
 
 <div class="search content">
     <div class="content-header">
-        <h2>Search Results</h2>     
+        <h2><span style="opacity: 0.6;">Results for </span><%= searchTerm %></h2>     
     </div>
-
-    <div class="match-count-header">
-        <% if(!matchCount) { %>Uh oh! No match found. <% } %>
-        <% if(matchCount === 1) { %> 1 match found. <% } %>
-        <% if(matchCount > 1) { %> <%= matchCount %> matches found. <% } %>
+    <div class="content-tabs">
+        <a href="/blogs/search?q=<%= searchTerm.replace(/\s/, "+") %>" class="<%= !tab ? "active" : "" %>">Stories</a>
+        <a href="/blogs/search/users?q=<%= searchTerm.replace(/\s/, "+") %>" class="<%= tab && tab === "users" ? "active" : "" %>">People</a>
     </div>
-    
     <div>
-    <% blogs && blogs.map((blog) => { %>
+    <% !tab && blogs && blogs.map((blog) => { %>
         <div class="blog">
-            <p class="author"><%= blog.author.alias %></p>
-            <h3><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h3>
+            <p class="author"><a href="/@<%= blog.author.username %>"><img src="/res/sample-profile-pic.jpg" class="profile-pic"><%= blog.author.fullName %></a></p>
+            <h3><a href="/blogs/<%= blog.slug %>"><%= blog.title %></a></h3>
             <p class="snippet"><%= blog.snippet %></p>
-            <p class="timestamp">
-                <%= blog.readingTime %> • 
-                <% if(new Date(blog.createdAt) < new Date(blog.updatedAt)){ %>
-                    (edited)
-                <% } %>
-                <%= blog.timestamp %>
+            <p class="options">
+                <span class="timestamp">
+                    <% if(new Date(blog.createdAt) < new Date(blog.updatedAt)){ %>
+                        (edited)
+                    <% } %>
+                    <%= blog.timestamp %>
+                </span>
+                <span>
+                    <%= blog?.readTime %>
+                </span>
             </p>
+        </div>
+    <% }) %>
+    <% tab === "users" && users && users.map((user) => { %>
+        <div class="user">
+            <img src="/res/sample-profile-pic.jpg" class="user-profile-pic">
+            <div class="user-info">
+                <p class="user-info-name"><a href="/@<%= user.username %>"><%= user.fullName %></a></p>
+                <p class="user-info-bio"><%= user.bio %></p>
+            </div>
+            <div class="user-action">
+                <button>follow</button>
+            </div>
         </div>
     <% }) %>
     </div>
@@ -47,14 +60,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    const searchBar = document.querySelector('.search-bar');
-    const searchBtn = document.querySelector('.search-btn');
-    searchBar.addEventListener('input', () => {
-        searchBar.value ? searchBtn.disabled = false : searchBtn.disabled = true;
-    })
-    searchBar.addEventListener('focus', () => {
-        searchBar.value ? searchBtn.disabled = false : searchBtn.disabled = true;
-    })
-</script>

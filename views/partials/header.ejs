@@ -4,9 +4,9 @@
             <h1><a href="/">Whimsy Blogs</a></h1>
         </div>
         <div class="site-search">
-            <form class="search-form" action="/blogs/search" method="POST">
+            <form class="search-form" action="/blogs/search" method="GET">
                 <button class="search-btn" type="submit" disabled><i class="fa-solid fa-search"></i></button>
-                <input class="search-bar" type="text" name="search" placeholder="Search blogs..." autocomplete="false">
+                <input class="search-bar" type="text" name="q" placeholder="Search blogs..." autocomplete="false">
             </form>
         </div>
     </div>
@@ -48,7 +48,16 @@
 <div class="sub-nav">
     <p>Become a pro member and get access to exclusive features! ✨</p>
 </div>
-
+<script>
+    const searchBar = document.querySelector('.search-bar');
+    const searchBtn = document.querySelector('.search-btn');
+    searchBar.addEventListener('input', () => {
+        searchBar.value ? searchBtn.disabled = false : searchBtn.disabled = true;
+    })
+    searchBar.addEventListener('focus', () => {
+        searchBar.value ? searchBtn.disabled = false : searchBtn.disabled = true;
+    })
+</script>
 <!-- <script>
     window.onscroll = () => {scrollFunction()};
     function scrollFunction() {

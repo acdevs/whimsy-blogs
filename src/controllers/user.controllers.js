@@ -5,15 +5,11 @@ import User from "../models/user.model.js"
 import Blog from "../models/blog.model.js"
 
 const user_profile_get = (req, res) => {
-    if( !req.user ){
-        res.redirect("/blogs/signin")
-        return
-    }
-
     const perPage = 10
+    const username = req.params.username
     const page = req.query.p || 1
     
-    Blog.find({ 'author.id' : req.user._id})
+    Blog.find({ 'author.username' : username })
     .sort({ createdAt: -1 })
     .skip(page * perPage - perPage)
     .limit(perPage)
@@ -36,7 +32,7 @@ const user_profile_get = (req, res) => {
             nextPage: hasNextPage ? nextPage : null,
             prevPage: hasPrevPage ? prevPage : null,
             res: {
-            user : req.user,
+                user : req.user,
             }
         })
     })

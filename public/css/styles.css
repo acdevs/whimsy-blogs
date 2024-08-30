@@ -208,6 +208,7 @@ button{
     position: relative;
     margin: 2rem auto;
     max-width: 800px;
+    min-height: 500px;
     padding: 4rem 2rem;
     border-radius: var(--border-radius);
     background-color: #fafafa;
@@ -297,20 +298,20 @@ button{
     font-size: 1.5rem;
     margin: -1rem 0 2rem;
 }
-.blog{
+.blog, .user{
     position: relative;
     padding: 1.2rem 2rem;
     background-color: #f5f5f5;
     border-bottom: 1px solid #E4E4E4;
 }
-.blog:nth-of-type(1){
+.blog:nth-of-type(1), .user:nth-of-type(1){
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
-.blog:nth-last-of-type(1){
+.blog:nth-last-of-type(1), .user:nth-last-of-type(1){
     border-radius: 0 0 var(--border-radius) var(--border-radius);
     border-bottom: 0;
 }
-.blog:only-of-type{
+.blog:only-of-type, .user:only-of-type{
     border-radius: var(--border-radius);
 }
 .blogs h2::after, .about h2::after, .search h2::after, .profile h2::after, .signin h2::after, .signup h2::after{
@@ -327,7 +328,7 @@ button{
 .blog h3{
     font-size: 1.5rem;
 }
-.blog .author{
+.blog .author > a{
     font-size: 1rem;
     margin: 0.5rem 0;
     display: flex;
@@ -347,6 +348,48 @@ button{
 }
 .blog .options > span{
     margin-right: 0.5rem;
+}
+.user{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+}
+.user-profile-pic{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+.user-info{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    flex-basis: 70%;
+}
+.user-info-name{
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+.user-info-bio{
+    font-size: 1.1rem;
+    color: #757575;
+    line-height: 1.3 !important;
+}
+.user-action{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.user-action > button{
+    font-family: var(--body);
+    font-size: 1.1rem;
+    background: #000;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: 0;
+    border-radius: var(--border-radius);
 }
 .content p {
     line-height: 1.6;
@@ -600,11 +643,11 @@ input.input-title::placeholder{
 .edit-blog button, 
 .signin button, .signup button{
     font-family: var(--body);
-    font-size: 1rem;
     margin-top: 20px;
+    font-size: 1.1rem;
     background: #000;
     color: white;
-    padding: 1rem 2rem;
+    padding: 0.75rem 1.5rem;
     border: 0;
     border-radius: var(--border-radius);
     cursor: pointer;

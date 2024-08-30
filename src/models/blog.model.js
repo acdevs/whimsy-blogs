@@ -29,6 +29,11 @@ const blogSchema = new mongoose.Schema({
             ref: 'User',
             required: true
         },
+        username : {
+            type: String,
+            required: true,
+            index: true,
+        },
         fullName : {
             type: String,
             required: true,
@@ -68,5 +73,7 @@ const blogSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const Blog = mongoose.model('Blog', blogSchema) //singular name of the collection
+
+blogSchema.index({ title: 'text', snippet: 'text', content: 'text', 'author.fullName': 'text' })
 
 export default Blog

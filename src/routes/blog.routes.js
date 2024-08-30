@@ -9,9 +9,10 @@ import {
     blog_delete,
     blog_edit_get,
     blog_edit_post,
-    blog_search_post,
+    blog_search_get,
     blog_signin_get,
     blog_signup_get,
+    user_search_get,
 } from '../controllers/blog.controllers.js'
 
 const router = express.Router()
@@ -26,6 +27,10 @@ router.get("/signin", blog_signin_get)
 
 router.get("/signup", blog_signup_get)
 
+router.get("/search", blog_search_get)
+
+router.get("/search/users", user_search_get)
+
 router.get("/create", blog_create_get)
 
 router.post("/", blog_create_post)
@@ -38,6 +43,5 @@ router.get('/edit/:slug', blog_edit_get)
 
 router.post("/edit", blog_edit_post)
 
-router.post("/search", blog_search_post)
 
 export default router

@@ -4,14 +4,11 @@ import {
     user_signin_post,
     user_signup_post,
     user_signout_get,
-    user_profile_get
 } from '../controllers/user.controllers.js'
 
 const router = express.Router()
 
 router.use(requireAuth)
-
-router.get("/profile", user_profile_get)
 
 router.post("/signin", user_signin_post)
 

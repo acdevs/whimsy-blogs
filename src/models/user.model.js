@@ -89,4 +89,6 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema) //singular name of the collection
 
+userSchema.index({ username: 'text', fullName: 'text' });
+
 export default User
