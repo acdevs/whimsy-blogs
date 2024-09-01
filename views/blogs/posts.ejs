@@ -33,7 +33,7 @@
       <div class="posts-options-right">
         <button class="save-btn"><span class="material-symbols-outlined">bookmark_add</span></button>
         <% if(res.user && res.isAuthor) { %>
-          <a href="/blogs/edit/<%= blog._id %>"><button class="edit-btn"><span class="material-symbols-outlined">edit</span></button></a>
+          <a href="/blogs/edit/<%= blog.slug %>"><button class="edit-btn"><span class="material-symbols-outlined">edit</span></button></a>
           <button class="delete-btn" data-doc="<%= blog._id %>"><span class="material-symbols-outlined">ink_eraser</span></button>
         <% } %>
       </div>

@@ -9,11 +9,11 @@ const perPage = 10
 const blog_index = async (req, res) => {
     const feed = req.query?.feed
     const page = req.query.p || 1
-    let blogList = []
+    let blogs = []
     let count = 0
     try{
         if(!feed){
-            [blogList, count] = await Blog.find()
+            [blogs, count] = await Blog.find({ status: "published" })
                 .sort({ createdAt: -1 })
                 .skip(page * perPage - perPage)
                 .limit(perPage)
@@ -30,7 +30,7 @@ const blog_index = async (req, res) => {
                 res.redirect("/blogs/signin")
                 return
             }
-            [blogList, count] = await Blog.find({ 'author.userId' : { $in: req.user.following } })
+            [blogs, count] = await Blog.find({ 'author.userId' : { $in: req.user.following }, status: "published" })
                 .sort({ createdAt: -1 })
                 .skip(page * perPage - perPage)
                 .limit(perPage)
@@ -50,7 +50,7 @@ const blog_index = async (req, res) => {
     
         res.render("index", { 
             title: "Home", 
-            blogs : blogList,
+            blogs,
             currentPage: page,
             nextPage: hasNextPage ? nextPage : null,
             prevPage: hasPrevPage ? prevPage : null,
@@ -135,21 +135,28 @@ const blog_create_get = (req, res) => {
 }
 
 const blog_create_post = (req, res) => {
-    const {title, snippet, content} = req.body
-    const slug = title.replace(/[\W_]+/g, "-").toLowerCase()
+    const {title, snippet, content, status, premium} = req.body
+    let slug = title.replace(/[\W_]+/g, "-").toLowerCase();
+    if(status === "draft")
+        slug = `${req.user?.username}-${title.replace(/[\W_]+/g, "-").toLowerCase()}`
     const blog = new Blog({
         slug, 
         title, 
         snippet, 
         content, 
+        status,
+        premium,
         'author.userId' : req.user._id, 
         'author.username' : req.user.username,
         'author.fullName' : req.user.fullName, 
-        readingTime : readingTime(content).text 
+        readTime : readingTime(content).text 
     })
     blog.save()
     .then(() => {
-        res.redirect("/blogs")
+        if(status === "published") 
+            res.redirect(`/@${req.user.username}`)
+        else
+            res.redirect(`/@${req.user.username}?tab=drafts`)
     })
     .catch((err) => {
         res.status(404).render("404", { title: "404" })
@@ -173,15 +180,16 @@ const blog_delete = (req, res) => {
 }
 
 const blog_edit_get = (req, res) => {
-    Blog.findById(req.params.id)
-    .then((data) => {
-        if( !req.user || req.user._id.toString() != data.author.id.toString() ){
+    const slug = req.params.slug
+    Blog.findOne({slug})
+    .then((blog) => {
+        if( !req.user || req.user._id.toString() != blog.author.userId.toString() ){
             res.redirect("/blogs/signin")
             return
         }
         res.render("./blogs/edit", { 
             title: "Editor", 
-            blog: data,
+            blog,
             res: {
                 user : req.user,
             }
@@ -193,16 +201,31 @@ const blog_edit_get = (req, res) => {
 }
 
 const blog_edit_post = (req, res) => {
-    Blog.findByIdAndUpdate(req.body._id, req.body, { new: true })
-    .then((data) => {
-        if( !req.user || req.user._id.toString() != data.author.id.toString() ){
+    const {_id, title, snippet, content, status, premium} = req.body
+    const slug = title.replace(/[\W_]+/g, "-").toLowerCase()
+    const blog = {
+        slug, 
+        title, 
+        snippet, 
+        content, 
+        status,
+        premium,
+        readTime : readingTime(content).text 
+    }
+    Blog.findByIdAndUpdate(_id, blog , { new: true })
+    .then((blog) => {
+        if( !req.user || req.user._id.toString() != blog.author.userId.toString() ){
             res.redirect("/blogs/signin")
             return
         }
-        res.redirect(`/blogs/${data._id}`)
+        if(status === "published") 
+            res.redirect(`/@${req.user.username}`)
+        else
+            res.redirect(`/@${req.user.username}?tab=drafts`)
     })
     .catch((err) => {
         res.status(404).render("404", { title: "404" })
+        console.log(err)
     })
 }
 
@@ -216,6 +239,7 @@ const blog_search_get = async (req, res) => {
         }).count({})
           
     Blog.find({
+        status: "published",
         $or: [
             { title: { $regex: searchNoSpecialChar, $options: "i" } },
             { snippet: { $regex: searchNoSpecialChar, $options: "i" } }

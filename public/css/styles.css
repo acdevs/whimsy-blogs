@@ -335,7 +335,7 @@ button{
 .blog:only-of-type, .user:only-of-type{
     border-radius: var(--border-radius);
 }
-.blogs h2::after, .about h2::after, .search h2::after, .profile h2::after, .signin h2::after, .signup h2::after{
+.blogs h2::after, .about h2::after, .search h2::after, .profile h2::after, .signin h2::after, .signup h2::after, .settings h2::after{
     content: '';
     position: absolute;
     bottom: 0;
@@ -702,25 +702,34 @@ button{
 .edit-blog input,
 .edit-blog textarea,
 .form-elements input{
+    text-wrap: wrap;
+    max-width: 100%;
     box-sizing: border-box;
     outline: none;
     font-family: var(--body);
     display: block;
     width: calc(100%);
-    margin: 10px 0;
-    padding: 1rem 1.5rem;
+    padding: 1rem;
     border: 0;
-    background-color: #f5f5f5;
+    background-color: transparent;
+    scrollbar-width: none;
 }
-.create-blog input:hover,
-.create-blog textarea:hover,
+.create-blog .input-checkbox, .edit-blog .input-checkbox{
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+}
+.create-blog input[type="checkbox"]{
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+}
 .create-blog input:focus,
 .create-blog textarea:focus,
-.edit-blog input:hover,
-.edit-blog textarea:hover,
 .edit-blog input:focus,
 .edit-blog textarea:focus{
-    border-left: 6px solid #000;
+    border-left: 1px solid #757575;
 }
 input.input-title::placeholder{
     color: #8e8e8e;
@@ -730,19 +739,15 @@ input.input-title::placeholder{
     font-size: 2rem;
 }
 .create-blog input.input-snippet, .edit-blog input.input-snippet{
-    font-style: italic;
     font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
 }
 .create-blog .textarea-content, .edit-blog .textarea-content{
     font-size: 1.2rem;
 }
-.create-blog label, .edit-blog label{
-    font-family: var(--heading);
-    display: block;
-    margin-top: 24px;
-}
 .create-blog textarea, .edit-blog textarea{
-    height: 250px;
+    min-height: 320px;
 }
 .create-blog button, 
 .edit-blog button, 

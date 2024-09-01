@@ -15,15 +15,8 @@
             <h3><a href="/blogs/<%= blog.slug %>"><%= blog.title %></a></h3>
             <p class="snippet"><%= blog.snippet %></p>
             <p class="options">
-                <span class="timestamp">
-                    <% if(new Date(blog.createdAt) < new Date(blog.updatedAt)){ %>
-                        (edited)
-                    <% } %>
-                    <%= blog.timestamp %>
-                </span>
-                <span>
-                    <%= blog?.readTime %>
-                </span>
+                <span class="timestamp"><%= blog.timestamp %></span>
+                <span><%= blog?.readTime %></span>
             </p>
         </div>
     <% }) %>

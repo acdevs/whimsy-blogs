@@ -7,12 +7,15 @@
     </div>
     <div class="content-tabs">
         <a href="@<%- author.username %>" class="<%= !tab ? "active" : "" %>">Home</a>
+        <% if(res.isAuthor){ %>
+            <a href="/@<%- author.username %>?tab=drafts" class="<%= tab && tab === "drafts" ? "active" : "" %>">Drafts</a>
+        <% } %>
         <a href="/@<%- author.username %>?tab=about" class="<%= tab && tab === "about" ? "active" : "" %>">About</a>
         <% if(res.isAuthor){ %>
             <a href="/@<%- author.username %>?tab=followers" class="<%= tab && tab === "followers" ? "active" : "" %>">Followers</a>
             <a href="/@<%- author.username %>?tab=following" class="<%= tab && tab === "following" ? "active" : "" %>">Following</a>
         <% } %>
-        <% if(res.isAuthor){ %><a class="text-tab" href="/me/settings?q=profile">Edit Profile <span class="material-symbols-outlined">edit</span></a><% } %>
+        <% if(res.isAuthor){ %><a class="text-tab" href="/users/settings?q=profile">Edit Profile <span class="material-symbols-outlined">edit</span></a><% } %>
     </div>
     <% if(!tab){ %>
         <div class="profile-section">
@@ -20,6 +23,9 @@
         </div>
         <div class="profile-section">
             <div class="profile-section-title">Stories</div>
+            <% if(blogs.length == 0){ %>
+                <p>Your stories will appear here.</p>
+            <% } %>
             <div>
             <% blogs && blogs.map((blog) => { %>
                 <div class="blog">
@@ -44,12 +50,51 @@
         <div class="pagination">
             <div>
                 <% if ( nextPage ) { %>
-                <a href="/blogs?p=<%= nextPage %>"><i class="fa-solid fa-chevron-left"></i> Older Posts</a>
+                <a href="/@<%- author.username %>?p=<%= nextPage %>"><i class="fa-solid fa-chevron-left"></i> Older Posts</a>
                 <% } %>
             </div>
             <div>
                 <% if ( prevPage ) { %>
-                    <a href="/blogs?p=<%= prevPage %>">Latest Posts <i class="fa-solid fa-chevron-right"></i></a>
+                    <a href="/@<%- author.username %>?p=<%= prevPage %>">Latest Posts <i class="fa-solid fa-chevron-right"></i></a>
+                <% } %>
+            </div>
+        </div>
+    <% } else if(tab === "drafts"){ %>
+        <div class="profile-section">
+            <div class="profile-section-title">Drafts</div>
+            <% if(blogs.length == 0){ %>
+                <p>Your drafts will appear here.</p>
+            <% } %>
+            <div>
+            <% blogs && blogs.map((blog) => { %>
+                <div class="blog">
+                    <p class="author"><a href="/@<%= blog.author.username %>"><img src="/res/sample-profile-pic.jpg" class="profile-pic"><%= blog.author.fullName %></a></p>
+                    <h3><a href="/blogs/edit/<%= blog.slug %>"><%= blog.title %></a></h3>
+                    <p class="snippet"><%= blog.snippet %></p>
+                    <p class="options">
+                        <span class="timestamp">
+                            <% if(new Date(blog.createdAt) < new Date(blog.updatedAt)){ %>
+                                (edited)
+                            <% } %>
+                            <%= blog.timestamp %>
+                        </span>
+                        <span>
+                            <%= blog?.readTime %>
+                        </span>
+                    </p>
+                </div>
+            <% }) %>
+            </div>
+        </div>
+        <div class="pagination">
+            <div>
+                <% if ( nextPage ) { %>
+                <a href="/@<%- author.username %>?tab=draft&p=<%= nextPage %>"><i class="fa-solid fa-chevron-left"></i> Older Posts</a>
+                <% } %>
+            </div>
+            <div>
+                <% if ( prevPage ) { %>
+                    <a href="/@<%- author.username %>?tab=drafts&p=<%= prevPage %>">Latest Posts <i class="fa-solid fa-chevron-right"></i></a>
                 <% } %>
             </div>
         </div>
@@ -69,6 +114,9 @@
     <% } else if(tab === "followers"){ %>
         <div class="profile-section">
             <div class="profile-section-title"><%= followers.length %> Followers</div>
+            <% if(followers.length == 0){ %>
+                <p>Your followers will appear here.</p>
+            <% } %>
             <div class="followers">
                 <% followers && followers.map((follower) => { %>
                     <div class="user">
@@ -87,6 +135,9 @@
     <% } else if(tab === "following"){ %>
         <div class="profile-section">
             <div class="profile-section-title"><%= following.length %> Following</div>
+            <% if(following.length == 0){ %>
+                <p>Your followings will appear here.</p>
+            <% } %>
             <div class="following">
                 <% following && following.map((follow) => { %>
                     <div class="user">

@@ -3,15 +3,18 @@
 <div class="create-blog content">
     <form class="create-blog-form" action="/blogs" method="POST">
         <h2>Share a Story</h2>
-        <label for="title">Title</label>
-        <input type="text" class="input-title" name="title" placeholder="Unveiling Enchanted Chronicles" autofocus>
-        <label for="snippet">Excerpt</label>
-        <input type="text" class="input-snippet" name="snippet" placeholder="Dive into a World of Magic and Wonder">
-        <label for="body">Content</label>
-        <textarea class="textarea-content" placeholder="As the sun dipped below the horizon, a realm of mysteries awaited, where stars whispered tales and moonbeams wove dreams..."></textarea>
+        <input type="text" class="input-title" name="title" placeholder="Title" autofocus>
+        <input type="text" class="input-snippet" name="snippet" placeholder="Excerpt">
+        <textarea class="textarea-content"></textarea>
         <input type="hidden" class="input-processed-content" name="content">
-        <button type="submit" disabled>Post</button>
-        <button>Save Draft</button>
+        <input type="hidden" class="input-status" name="status">
+        <% if(res.user.subscription.subscriptionType === "premium"){ %>
+            <div class="input-checkbox">
+                <input type="checkbox" name="premium">Premium ✨
+            </div>
+        <% } %>
+        <button class="submit-btn publish-btn" disabled>Publish</button>
+        <button class="submit-btn draft-btn" disabled>Save Draft</button>
     </form>
 </div>
 
@@ -20,12 +23,26 @@
     const title = createBlogForm.querySelector('.input-title');
     const snip = createBlogForm.querySelector('.input-snippet');
     const body = createBlogForm.querySelector('.textarea-content');
-    const button = createBlogForm.querySelector('button[type="submit"]');
+    const status = createBlogForm.querySelector('.input-status');
+    const publishBtn = createBlogForm.querySelector('.publish-btn');
+    const draftBtn = createBlogForm.querySelector('.draft-btn');
+    const blogProcessed = createBlogForm.querySelector('.input-processed-content');
+
+    body.addEventListener('input', () => {
+        body.style.height = body.scrollHeight + 'px';
+    });
 
     createBlogForm.addEventListener('submit', () => {
-        const blog = document.querySelector('.input-processed-content');
-        blog.value = body.value.replace(/\n/g, '<br>');
+        blogProcessed.value = body.value.replace(/\n/g, '<br>');
     });
+    publishBtn.addEventListener('click', () => {
+        status.value = 'published';
+        createBlogForm.submit();
+    })
+    draftBtn.addEventListener('click', () => {
+        status.value = 'draft';
+        createBlogForm.submit();
+    })
 
     title.addEventListener('input', () => {
         title.value ? title.value = title.value.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()) : "";
@@ -36,7 +53,18 @@
     });
 
     createBlogForm.addEventListener('input', () => {
-        title.value && snip.value && body.value ? button.disabled = false : button.disabled = true;
+        if (title.value && snip.value && body.value) {
+            publishBtn.removeAttribute('disabled');
+        }
+        else {
+            publishBtn.setAttribute('disabled', 'disabled');
+        }
+        if (title.value) {
+            draftBtn.removeAttribute('disabled');
+        }
+        else {
+            draftBtn.setAttribute('disabled', 'disabled');
+        }
     });
     function sentenceCase(str) {
         return str.replace(/(^|\.\s+)([a-z])/g, (match, group1, group2) => {
