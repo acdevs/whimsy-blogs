@@ -2,15 +2,16 @@
 
 <div class="create-blog content">
     <form class="create-blog-form" action="/blogs" method="POST">
-        <h2>Write a New Blog</h2>
-        <label for="title">Blog title</label>
+        <h2>Share a Story</h2>
+        <label for="title">Title</label>
         <input type="text" class="input-title" name="title" placeholder="Unveiling Enchanted Chronicles" autofocus>
-        <label for="snippet">Blog snippet</label>
+        <label for="snippet">Excerpt</label>
         <input type="text" class="input-snippet" name="snippet" placeholder="Dive into a World of Magic and Wonder">
-        <label for="body">Blog body</label>
+        <label for="body">Content</label>
         <textarea class="textarea-content" placeholder="As the sun dipped below the horizon, a realm of mysteries awaited, where stars whispered tales and moonbeams wove dreams..."></textarea>
         <input type="hidden" class="input-processed-content" name="content">
-        <button type="submit" disabled>Create</button>
+        <button type="submit" disabled>Post</button>
+        <button>Save Draft</button>
     </form>
 </div>
 

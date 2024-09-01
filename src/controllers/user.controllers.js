@@ -4,41 +4,100 @@ import jwt from "jsonwebtoken"
 import User from "../models/user.model.js"
 import Blog from "../models/blog.model.js"
 
-const user_profile_get = (req, res) => {
+const user_profile_get = async (req, res) => {
     const perPage = 10
     const username = req.params.username
+    const tab = req.query.tab
     const page = req.query.p || 1
-    
-    Blog.find({ 'author.username' : username })
-    .sort({ createdAt: -1 })
-    .skip(page * perPage - perPage)
-    .limit(perPage)
-    .then( async (data) => {
-        data.forEach((blog) => {
-            blog.timestamp = dateFns.formatDistanceToNow(new Date(blog.updatedAt), { addSuffix: true })
-        })
-        
-        const count = await Blog.count({});
-        const pageCount = Math.ceil(count / perPage);
-        const nextPage = parseInt(page) + 1;
-        const prevPage = parseInt(page) - 1;
-        const hasNextPage = nextPage <= pageCount;
-        const hasPrevPage = prevPage >= 1;
+    try{
+        if(!tab){
+            let [blogs, author] = await Promise.all([
+                Blog.find({ 'author.username' : username })
+                .sort({ createdAt: -1 })
+                .skip(page * perPage - perPage)
+                .limit(perPage),
+                User.findOne({ username })
+            ])
+            blogs.forEach((blog) => {
+                blog.timestamp = dateFns.formatDistanceToNow(new Date(blog.updatedAt), { addSuffix: true })
+            })
+            
+            const count = await Blog.count({});
+            const pageCount = Math.ceil(count / perPage);
+            const nextPage = parseInt(page) + 1;
+            const prevPage = parseInt(page) - 1;
+            const hasNextPage = nextPage <= pageCount;
+            const hasPrevPage = prevPage >= 1;
 
-        res.render("./users/profile", {
-            title: "All my Blogs", 
-            blogs: data,
-            currentPage: page,
-            nextPage: hasNextPage ? nextPage : null,
-            prevPage: hasPrevPage ? prevPage : null,
-            res: {
-                user : req.user,
-            }
-        })
-    })
-    .catch((err) => {
+            res.render("./users/profile", {
+                title: "Profile", 
+                blogs,
+                author,
+                currentPage: page,
+                nextPage: hasNextPage ? nextPage : null,
+                prevPage: hasPrevPage ? prevPage : null,
+                tab : null,
+                res: {
+                    user : req.user,
+                    isAuthor: req.user ? req.user._id.toString() === author._id.toString() : false
+                }
+            })
+        }
+        else if(tab === "about"){
+            const author = await User.findOne({ username })
+            res.render("./users/profile", {
+                title: "Profile", 
+                author,
+                tab,
+                res: {
+                    user : req.user,
+                    isAuthor: req.user ? req.user._id.toString() === author._id.toString() : false
+                }
+            })
+        }
+        else if(tab === "followers"){
+            const author = await User.findOne({ username })
+            const followers = await Promise.all(
+                author.followers.map(async (follower) => {
+                    let followerInfo = await User.findById(follower)
+                    return followerInfo
+                })
+            )
+            res.render("./users/profile", {
+                title: "Profile", 
+                followers,
+                author,
+                tab,
+                res: {
+                    user : req.user,
+                    isAuthor: req.user ? req.user._id.toString() === author._id.toString() : false
+                }
+            })
+        }
+        else if(tab === "following"){
+            const author = await User.findOne({ username })
+            const following = await Promise.all(
+                author.following.map(async (followed) => {
+                    let followedInfo = await User.findById(followed)
+                    return followedInfo
+                })
+            )
+            res.render("./users/profile", {
+                title: "Profile", 
+                following,
+                author,
+                tab,
+                res: {
+                    user : req.user,
+                    isAuthor: req.user ? req.user._id.toString() === author._id.toString() : false
+                }
+            })
+        }
+    }
+    catch(err){
         res.status(404).render("404", { title: "404" })
-    })
+        console.log(err)
+    }
 }
 
 const user_signup_post = (req, res) => {

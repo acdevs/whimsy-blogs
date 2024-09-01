@@ -15,6 +15,7 @@
     --sub-nav-height: 50px;
 }
 *{
+    /* outline: 1px solid red; */
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
@@ -41,7 +42,7 @@ a{
 a:hover{
     text-decoration: underline;
 }
-h1, h2, h3, a, p{
+h1, h2, h3, h4, a, p{
     margin: 0;
     padding: 0;
     font-weight: normal;
@@ -57,6 +58,11 @@ h3{
     text-transform: capitalize;
     margin-bottom: 8px;
     font-size: 1.5rem;
+}
+h4{
+    font-family: var(--heading);
+    font-size: 1.25rem;
+    font-weight: normal;
 }
 button{
     box-sizing: border-box !important;
@@ -164,7 +170,6 @@ button{
 .profile-options a{
     color: black;
     padding: 0.75rem 1rem;
-    text-decoration: none;
     display: block;
 }
 .profile-options a:hover, .profile-options a:active{
@@ -213,10 +218,18 @@ button{
     border-radius: var(--border-radius);
     background-color: #fafafa;
 }
+.content-no-bg{
+    position: relative;
+    margin: 2rem auto;
+    max-width: 800px;
+    padding: 4rem 2rem;
+    border-radius: var(--border-radius);
+    background-color: transparent;
+}
 .content-tabs{
     display: flex;
     align-items: center;
-    margin: 1.2rem;
+    margin: 1.2rem 0;
     height: 50px;
     border-bottom: 1px solid #E4E4E4;
 }
@@ -242,11 +255,19 @@ button{
 .content-tabs .material-symbols-outlined:hover{
     background-color: #f5f5f5;
 }
+.content-tabs .text-tab .material-symbols-outlined{
+    margin: 0 0.5rem;
+}
+.content-tabs .text-tab .material-symbols-outlined:hover{
+    background-color: unset;
+}
+
 .content-header{
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     margin-bottom: 50px;
+    gap: 1rem;
 } 
 .content-header h2{
     margin: 0;
@@ -353,20 +374,21 @@ button{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2rem;
+    padding: 1rem 2rem;
+    /* background-color: transparent; */
 }
 .user-profile-pic{
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    margin-right: 0.5rem;
+    margin-right: 0.75rem;
 }
 .user-info{
     display: flex;
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
-    flex-basis: 70%;
+    flex-basis: 100%;
 }
 .user-info-name{
     font-size: 1.25rem;
@@ -391,6 +413,11 @@ button{
     border: 0;
     border-radius: var(--border-radius);
 }
+.user-action-undo > button{
+    background-color: transparent;
+    color: #000;
+    border: 1px solid #000;
+}
 .content p {
     line-height: 1.6;
 }
@@ -401,6 +428,42 @@ button{
 .quote {
     font-style: italic;
     color: #888;
+}
+.profile .profile-pic{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.profile-section{
+    margin: 2rem 0;
+}
+.profile-section-title{
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+.profile-section .author-bio{
+    font-size: 1.1rem;
+    line-height: 1.3 !important;
+    color: #757575;
+}
+.about-author-count{
+    font-size: 1.25rem;
+    color: #000363;
+    margin: 1rem 0;
+    font-weight: bold;
+}
+.about-author-connect{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.about-author-connect a{
+    font-size: 1rem;
+    padding: 0.25rem 1rem;
+    background-color: #000;
+    color: #f5f5f5;
+    border-radius: var(--border-radius);
 }
 
 .posts h2{
@@ -444,6 +507,10 @@ button{
     margin-bottom: 2rem;
     border-top: 1px solid #E4E4E4;
     border-bottom: 1px solid #E4E4E4;
+}
+.posts-options:last-child{
+    border: none;
+    margin-bottom: 0;
 }
 .posts-options a{
     text-decoration: none;
@@ -559,33 +626,71 @@ button{
 .body-popup-open{
     overflow: hidden;
 }
-
 .comments{
-    margin-top: 20px;
+    padding: 1rem 2rem;
+}
+.comments h3{
+    border-bottom: 1px solid #E4E4E4;
 }
 .comments-container{
     display: flex;
     flex-direction: column;
-    gap: 20px;
 }
 .comment{
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 0;
+    border-bottom: 1px solid #E4E4E4;
+}
+.comment:last-child{
+    border-bottom: none;
 }
 .comment-author{
     display: flex;
-    gap: 10px;
+    align-items: center;
 }
-.profile-pic{
+.comment-author .profile-pic{
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    margin-right: 0.5rem;
 }
-.author{
-    font-weight: 500;
+.comment-date{
+    color: #757575;
 }
 .comment-body{
-    font-size: 14px;
+    padding-left: calc(30px + 0.5rem);
+}
+.comment-form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 0;
+}
+.form-comment-input{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: end;
+    gap : 1rem;
+    margin: 1rem 0;
+}
+.comment-form textarea{
+    width: 100%;
+    height: 100px;
+    padding: 0.5rem;
+    border: 1px solid #E4E4E4;
+}
+.comment-form button{
+    font-family: var(--body);
+    font-size: 1rem;
+    background: #000;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: 0;
+    border-radius: var(--border-radius);
+    cursor: pointer;
 }
 
 .create-blog form, .edit-blog form{
@@ -644,6 +749,7 @@ input.input-title::placeholder{
 .signin button, .signup button{
     font-family: var(--body);
     margin-top: 20px;
+    margin-right: 0.25rem;
     font-size: 1.1rem;
     background: #000;
     color: white;

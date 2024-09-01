@@ -2,6 +2,7 @@ import dateFns from "date-fns"
 import readingTime from 'reading-time'
 import Blog from "../models/blog.model.js"
 import User from "../models/user.model.js"
+import Comment from "../models/comment.model.js"
 
 const perPage = 10
 
@@ -78,12 +79,22 @@ const blog_post = (req, res) => {
     const slug = req.params.slug
     Blog.findOne({slug})
     .then(async (blog) => {
-        let author = User.findOne({ _id: blog.author.userId })
+        let [author, comments] = await Promise.all([
+            await User.findOne({ _id: blog.author.userId }),
+            await Comment.find({ blogId: blog._id })
+        ])
+        comments = await Promise.all(
+            comments.map(async (comment) => {
+                comment.user = await User.findOne({ _id: comment.userId })
+                return comment
+            })
+        )
         if(!req.user){
             res.render("./blogs/posts", { 
                 title: "Blog Post", 
                 blog,
                 author,
+                comments,
                 res: {
                     user : null, 
                     isAuthor : null
@@ -97,9 +108,10 @@ const blog_post = (req, res) => {
             title: "Blog Post", 
             blog,
             author,
+            comments,
             res: {
                 user : req.user, 
-                isAuthor : isAuthor
+                isAuthor
             } 
         })
     })
@@ -125,7 +137,16 @@ const blog_create_get = (req, res) => {
 const blog_create_post = (req, res) => {
     const {title, snippet, content} = req.body
     const slug = title.replace(/[\W_]+/g, "-").toLowerCase()
-    const blog = new Blog({slug, title, snippet, content, 'author.userId' : req.user._id, 'author.fullName' : req.user.fullName, readingTime : readingTime(content).text })
+    const blog = new Blog({
+        slug, 
+        title, 
+        snippet, 
+        content, 
+        'author.userId' : req.user._id, 
+        'author.username' : req.user.username,
+        'author.fullName' : req.user.fullName, 
+        readingTime : readingTime(content).text 
+    })
     blog.save()
     .then(() => {
         res.redirect("/blogs")

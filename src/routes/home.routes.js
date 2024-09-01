@@ -11,6 +11,7 @@ router.get("/about", (req, res) => {
 })
 
 import { user_profile_get } from '../controllers/user.controllers.js'
-router.get("/@:username", user_profile_get)
+import { requireAuth } from '../middlewares/auth.middlewares.js'
+router.get("/@:username", requireAuth, user_profile_get)
 
 export default router

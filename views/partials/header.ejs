@@ -24,7 +24,8 @@
                     <img src="/res/sample-profile-pic.jpg" alt="Profile Pic" class="profile-pic">
                 </a>
                 <div class="profile-options">
-                    <a href="/users/profile">Profile</a>
+                    <a href="/@<%= res.user.username %>">Profile</a>
+                    <a href="/me/settings">Settings</a>
                     <a href="/users/signout">Sign Out</a>
                 </div>
             </span>
@@ -49,6 +50,14 @@
     <p>Become a pro member and get access to exclusive features! ✨</p>
 </div>
 <script>
+    window.onscroll = () => {scrollFunction()};
+    function scrollFunction() {
+        if (document.body.scrollTop > 125  || document.documentElement.scrollTop > 125) {
+            document.querySelector(".nav").classList.add("nav-sticky");
+        } else {
+            document.querySelector(".nav").classList.remove("nav-sticky");
+        }
+    }
     const searchBar = document.querySelector('.search-bar');
     const searchBtn = document.querySelector('.search-btn');
     searchBar.addEventListener('input', () => {
@@ -58,13 +67,3 @@
         searchBar.value ? searchBtn.disabled = false : searchBtn.disabled = true;
     })
 </script>
-<!-- <script>
-    window.onscroll = () => {scrollFunction()};
-    function scrollFunction() {
-        if (document.body.scrollTop > 125  || document.documentElement.scrollTop > 125) {
-            document.querySelector(".nav").classList.add("nav-sticky");
-        } else {
-            document.querySelector(".nav").classList.remove("nav-sticky");
-        }
-    }
-</script> -->
