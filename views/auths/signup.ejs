@@ -1,7 +1,7 @@
 <%- include('../partials/header.ejs') %>
 
 <div class="signup content">
-    <form action="/users/signup" method="POST">
+    <form class="signup-form" action="/users/signup" method="POST">
         <h2>Build Your Profile</h2>
         <div class="form">
             <div class="form-illus"></div>
@@ -10,12 +10,12 @@
                     <% if(error.message) {%>
                         <div class="error-msg">*<%= error.message %></div>
                     <% } %>
-                    <label for="alias">Your magical alias?</label>
-                    <input type="text" id="alias" name="alias" autofocus>
-                    <label for="email">Whisper your enchanted email.</label>
-                    <input type="email" id="email" name="email">
-                    <label for="password">Guard with a secret passphrase!</label>
-                    <input type="password" id="password" name="password">
+                    <label for="fullName">Your good name?</label>
+                    <input type="text" class="input-fullName" name="fullName" autofocus>
+                    <label for="email">Your enchanted email.</label>
+                    <input type="email" class="input-email" name="email">
+                    <label for="password">Your secret passphrase!</label>
+                    <input type="password" class="input-password" name="password">
                     <button type="submit" disabled>Sign up</button>
                     <div class="sign-other-option">
                         Already have an account? <a href="/blogs/signin">Sign in</a>
@@ -27,17 +27,17 @@
 </div>
 
 <script>
-    const form = document.querySelector('form');
-    const alias = document.querySelector('#alias');
-    const email = document.querySelector('#email');
-    const password = document.querySelector('#password');
-    const button = document.querySelector('button[type="submit"]');
+    const signupForm = document.querySelector('.signup-form');
+    const fullName = signupForm.querySelector('.input-fullName');
+    const email = signupForm.querySelector('.input-email');
+    const password = signupForm.querySelector('.input-password');
+    const button = signupForm.querySelector('button[type="submit"]');
 
-    alias.addEventListener('input', () => {
-        alias.value ? alias.value = alias.value.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()) : "";
+    fullName.addEventListener('input', () => {
+        fullName.value ? fullName.value = fullName.value.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase()) : "";
     });
 
-    form.addEventListener('input', () => {
-        alias.value && email.value && password.value ? button.disabled = false : button.disabled = true;
+    signupForm.addEventListener('input', () => {
+        fullName.value && email.value && password.value ? button.disabled = false : button.disabled = true;
     });
 </script>

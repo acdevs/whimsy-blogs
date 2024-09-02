@@ -1,31 +1,51 @@
 <%- include('../partials/header.ejs') %>
 
 <div class="edit-blog content">
-    <form action="/blogs/edit" method="POST">
-        <h2>Edit Blog</h2>
-        <label for="title">Blog title</label>
-        <input type="text" id="title" name="title" value="<%= blog.title %>">
-        <label for="snippet">Blog snippet</label>
-        <input type="text" id="snippet" name="snippet" value="<%= blog.snippet %>">
-        <label for="body">Blog body</label>
-        <textarea id="body"><%= blog.body.replace(/<br>/g, '\n') %></textarea>
-        <input type="hidden" id="processedBody" name="body">
-        <input type="hidden" id="id" name="_id" value="<%= blog._id %>">
-        <button type="submit" disabled>Save</button>
+    <form class="edit-blog-form" action="/blogs/edit" method="POST">
+        <h2>Share a Story</h2>
+        <input type="hidden" name="_id" value="<%= blog._id %>">
+        <input type="text" class="input-title" name="title" placeholder="Title" value="<%= blog.title %>" autofocus>
+        <input type="text" class="input-snippet" name="snippet" placeholder="Excerpt" value="<%= blog.snippet %>">
+        <textarea class="textarea-content"></textarea>
+        <input type="hidden" class="input-processed-content" name="content" value="<%= blog.content %>">
+        <input type="hidden" class="input-status" name="status">
+        <% if(res.user.subscription.subscriptionType === "premium"){ %>
+            <div class="input-checkbox">
+                <input type="checkbox" name="premium">Premium ✨
+            </div>
+        <% } %>
+        <button class="submit-btn publish-btn" disabled>Publish</button>
+        <button class="submit-btn draft-btn" disabled>Save Draft</button>
     </form>
 </div>
 
 <script>
-    const form = document.querySelector('form');
-    const title = document.querySelector('#title');
-    const snip = document.querySelector('#snippet');
-    const body = document.querySelector('textarea');
-    const button = document.querySelector('button[type="submit"]');
+    const editBlogForm = document.querySelector('.edit-blog-form');
+    const title = editBlogForm.querySelector('.input-title');
+    const snip = editBlogForm.querySelector('.input-snippet');
+    const body = editBlogForm.querySelector('.textarea-content');
+    const status = editBlogForm.querySelector('.input-status');
+    const publishBtn = editBlogForm.querySelector('.publish-btn');
+    const draftBtn = editBlogForm.querySelector('.draft-btn');
+    const blogProcessed = editBlogForm.querySelector('.input-processed-content');
 
-    form.addEventListener('submit', () => {
-        const blog = document.querySelector('#processedBody');
-        blog.value = body.value.replace(/\n/g, '<br>');
+    body.innerHTML = blogProcessed.value.replace(/<br>/g, '\n');
+    body.style.height = body.scrollHeight + 'px';
+    body.addEventListener('input', (e) => {
+        body.style.height = body.scrollHeight + 'px';
     });
+
+    editBlogForm.addEventListener('submit', () => {
+        blogProcessed.value = body.value.replace(/\n/g, '<br>');
+    });
+    publishBtn.addEventListener('click', () => {
+        status.value = 'published';
+        editBlogForm.submit();
+    })
+    draftBtn.addEventListener('click', () => {
+        status.value = 'draft';
+        editBlogForm.submit();
+    })
 
     title.addEventListener('input', () => {
         title.value ? title.value = title.value.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()) : "";
@@ -35,8 +55,19 @@
         snip.value ? snip.value = sentenceCase(snip.value) : "";
     });
 
-    form.addEventListener('input', () => {
-        title.value && snip.value && body.value ? button.disabled = false : button.disabled = true;
+    editBlogForm.addEventListener('input', () => {
+        if (title.value && snip.value && body.value) {
+            publishBtn.removeAttribute('disabled');
+        }
+        else {
+            publishBtn.setAttribute('disabled', 'disabled');
+        }
+        if (title.value) {
+            draftBtn.removeAttribute('disabled');
+        }
+        else {
+            draftBtn.setAttribute('disabled', 'disabled');
+        }
     });
     function sentenceCase(str) {
         return str.replace(/(^|\.\s+)([a-z])/g, (match, group1, group2) => {

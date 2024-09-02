@@ -1,30 +1,48 @@
 <%- include('../partials/header.ejs') %>
 
 <div class="create-blog content">
-    <form action="/blogs" method="POST">
-        <h2>Write a New Blog</h2>
-        <label for="title">Blog title</label>
-        <input type="text" id="title" name="title" placeholder="Unveiling Enchanted Chronicles" autofocus>
-        <label for="snippet">Blog snippet</label>
-        <input type="text" id="snippet" name="snippet" placeholder="Dive into a World of Magic and Wonder">
-        <label for="body">Blog body</label>
-        <textarea id="body" placeholder="As the sun dipped below the horizon, a realm of mysteries awaited, where stars whispered tales and moonbeams wove dreams..."></textarea>
-        <input type="hidden" id="processedBody" name="body">
-        <button type="submit" disabled>Create</button>
+    <form class="create-blog-form" action="/blogs" method="POST">
+        <h2>Share a Story</h2>
+        <input type="text" class="input-title" name="title" placeholder="Title" autofocus>
+        <input type="text" class="input-snippet" name="snippet" placeholder="Excerpt">
+        <textarea class="textarea-content"></textarea>
+        <input type="hidden" class="input-processed-content" name="content">
+        <input type="hidden" class="input-status" name="status">
+        <% if(res.user.subscription.subscriptionType === "premium"){ %>
+            <div class="input-checkbox">
+                <input type="checkbox" name="premium">Premium ✨
+            </div>
+        <% } %>
+        <button class="submit-btn publish-btn" disabled>Publish</button>
+        <button class="submit-btn draft-btn" disabled>Save Draft</button>
     </form>
 </div>
 
 <script>
-    const form = document.querySelector('form');
-    const title = document.querySelector('#title');
-    const snip = document.querySelector('#snippet');
-    const body = document.querySelector('textarea');
-    const button = document.querySelector('button[type="submit"]');
+    const createBlogForm = document.querySelector('.create-blog-form');
+    const title = createBlogForm.querySelector('.input-title');
+    const snip = createBlogForm.querySelector('.input-snippet');
+    const body = createBlogForm.querySelector('.textarea-content');
+    const status = createBlogForm.querySelector('.input-status');
+    const publishBtn = createBlogForm.querySelector('.publish-btn');
+    const draftBtn = createBlogForm.querySelector('.draft-btn');
+    const blogProcessed = createBlogForm.querySelector('.input-processed-content');
 
-    form.addEventListener('submit', () => {
-        const blog = document.querySelector('#processedBody');
-        blog.value = body.value.replace(/\n/g, '<br>');
+    body.addEventListener('input', () => {
+        body.style.height = body.scrollHeight + 'px';
     });
+
+    createBlogForm.addEventListener('submit', () => {
+        blogProcessed.value = body.value.replace(/\n/g, '<br>');
+    });
+    publishBtn.addEventListener('click', () => {
+        status.value = 'published';
+        createBlogForm.submit();
+    })
+    draftBtn.addEventListener('click', () => {
+        status.value = 'draft';
+        createBlogForm.submit();
+    })
 
     title.addEventListener('input', () => {
         title.value ? title.value = title.value.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()) : "";
@@ -34,8 +52,19 @@
         snip.value ? snip.value = sentenceCase(snip.value) : "";
     });
 
-    form.addEventListener('input', () => {
-        title.value && snip.value && body.value ? button.disabled = false : button.disabled = true;
+    createBlogForm.addEventListener('input', () => {
+        if (title.value && snip.value && body.value) {
+            publishBtn.removeAttribute('disabled');
+        }
+        else {
+            publishBtn.setAttribute('disabled', 'disabled');
+        }
+        if (title.value) {
+            draftBtn.removeAttribute('disabled');
+        }
+        else {
+            draftBtn.setAttribute('disabled', 'disabled');
+        }
     });
     function sentenceCase(str) {
         return str.replace(/(^|\.\s+)([a-z])/g, (match, group1, group2) => {

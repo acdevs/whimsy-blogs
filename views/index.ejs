@@ -1,30 +1,28 @@
 <%- include('./partials/header.ejs') %>
 
 <div class="blogs content">
-    <div class="content-header">
-        <h2>Latest Posts</h2>
-    </div>
-
+    <% if(res.user){ %>
+        <div class="content-tabs">
+            <a href="/blogs"><span class="material-symbols-outlined">add</span></a>
+            <a href="/blogs" class="<%= !tab ? "active" : "" %>">For you</a>
+            <a href="/blogs?feed=following" class="<%= tab && tab === "following" ? "active" : "" %>">Following</a>
+        </div>
+    <% } else { %>
+        <h2><span style="opacity: 0.6;">Latest</span> Posts</h2>
+    <% } %>
     <div>
     <% blogs && blogs.map((blog) => { %>
         <div class="blog">
-            <p class="author"><%= blog.author.alias %></p>
-            <h3><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h3>
+            <p class="author"><a href="/@<%= blog.author.username %>"><img src="/res/sample-profile-pic.jpg" class="profile-pic"><%= blog.author.fullName %></a></p>
+            <h3><a href="/blogs/<%= blog.slug %>"><%= blog.title %></a></h3>
             <p class="snippet"><%= blog.snippet %></p>
-            <p class="timestamp">
-                <%= blog.readingTime %> • 
-                <% if(new Date(blog.createdAt) < new Date(blog.updatedAt)){ %>
-                    (edited)
-                <% } %>
-                <%= blog.timestamp %>
+            <p class="options">
+                <span class="timestamp"><%= blog.timestamp %></span>
+                <span><%= blog?.readTime %></span>
             </p>
         </div>
     <% }) %>
     </div>
-
-    <% if (blogs.length === 0) { %>
-        <p>No blogs to read yet. 😢</p>
-    <% } %>
 
     <div class="pagination">
         <div>
@@ -39,14 +37,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    const searchBar = document.querySelector('.search-bar');
-    const searchBtn = document.querySelector('.search-btn');
-    searchBar.addEventListener('input', () => {
-        searchBar.value ? searchBtn.disabled = false : searchBtn.disabled = true;
-    })
-    searchBar.addEventListener('focus', () => {
-        searchBar.value ? searchBtn.disabled = false : searchBtn.disabled = true;
-    })
-</script>
