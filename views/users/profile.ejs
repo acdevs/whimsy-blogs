@@ -15,7 +15,7 @@
             <a href="/@<%- author.username %>?tab=followers" class="<%= tab && tab === "followers" ? "active" : "" %>">Followers</a>
             <a href="/@<%- author.username %>?tab=following" class="<%= tab && tab === "following" ? "active" : "" %>">Following</a>
         <% } %>
-        <% if(res.isAuthor){ %><a class="text-tab" href="/users/settings?q=profile">Edit Profile <span class="material-symbols-outlined">edit</span></a><% } %>
+        <% if(res.isAuthor){ %><a class="text-tab" href="/me/settings?q=profile">Edit Profile <span class="material-symbols-outlined">edit</span></a><% } %>
     </div>
     <% if(!tab){ %>
         <div class="profile-section">
